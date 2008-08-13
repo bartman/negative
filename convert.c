@@ -1,0 +1,57 @@
+#include <err.h>
+#include <string.h>
+#include <cairo.h>
+#include <rsvg.h>
+#include <rsvg-cairo.h>
+
+static const char *next_layer(const char *p)
+{
+	const char *comma = strchr(p, ',');
+	if (!comma)
+		return NULL;
+	return comma+1;
+}
+
+int main(int argc, char *argv[])
+{
+	unsigned int i;
+	RsvgHandle *rsvg;
+	GError *err;
+
+	rsvg_init();
+	rsvg = rsvg_handle_new_from_file(argv[1], &err);
+	if (!rsvg)
+		errx(1, "Could not load file %s", argv[1]);
+
+	for (i = 2; i < argc; i++) {
+		cairo_surface_t* csurf;
+		cairo_t *c;
+		const char *p;
+		char name[sizeof("slide-%03i.png")];
+
+		csurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+						   1024, 768);
+		if (!csurf)
+			errx(1, "Could not create surface");
+		c = cairo_create(csurf);
+		if (!c)
+			errx(1, "Could not create cairo");
+
+		for (p = argv[i]; p; p = next_layer(p)) {
+			char id[1 + strcspn(p, ",") + 1];
+			id[0] = '#';
+			memcpy(id+1, p, strcspn(p, ","));
+			id[1+strcspn(p, ",")] = '\0';
+
+			rsvg_handle_render_cairo_sub(rsvg, c, id);
+		}
+		sprintf(name, "slide-%03i.png", i-1);
+		if (cairo_surface_write_to_png(csurf, name)
+		    != CAIRO_STATUS_SUCCESS)
+			errx(1, "writing out %s", name);
+		printf("%s\n", name);
+		cairo_destroy(c);
+		cairo_surface_destroy(csurf);
+	}
+	return 0;
+}

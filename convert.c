@@ -29,6 +29,9 @@ int main(int argc, char *argv[])
 		const char *p;
 		char name[sizeof("slide-%03i.png")];
 
+		sprintf(name, "slide-%03i.png", i-1);
+		printf("%s\n", name);
+
 		csurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
 						   1024, 768);
 		if (!csurf)
@@ -43,13 +46,12 @@ int main(int argc, char *argv[])
 			memcpy(id+1, p, strcspn(p, ","));
 			id[1+strcspn(p, ",")] = '\0';
 
+			printf(" - %s\n", id);
 			rsvg_handle_render_cairo_sub(rsvg, c, id);
 		}
-		sprintf(name, "slide-%03i.png", i-1);
 		if (cairo_surface_write_to_png(csurf, name)
 		    != CAIRO_STATUS_SUCCESS)
 			errx(1, "writing out %s", name);
-		printf("%s\n", name);
 		cairo_destroy(c);
 		cairo_surface_destroy(csurf);
 	}

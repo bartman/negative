@@ -4,6 +4,10 @@
 #include <rsvg.h>
 #include <rsvg-cairo.h>
 
+#define OUTPUT_X 800
+#define OUTPUT_Y 600
+
+
 static const char *next_layer(const char *p)
 {
 	const char *comma = strchr(p, ',');
@@ -33,10 +37,11 @@ int main(int argc, char *argv[])
 		printf("%s\n", name);
 
 		csurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-						   1024, 768);
+						   OUTPUT_X, OUTPUT_Y);
 		if (!csurf)
 			errx(1, "Could not create surface");
 		c = cairo_create(csurf);
+		cairo_scale(c, OUTPUT_X/1024.0, OUTPUT_Y/768.0);
 		if (!c)
 			errx(1, "Could not create cairo");
 

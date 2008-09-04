@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="768"
+   id="svg2399"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docbase="/home/rusty/text/lca-2007"
+   sodipodi:docname="demo.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0"
+   style="display:inline">
+  <defs
+     id="defs2401">
+    <linearGradient
+       id="linearGradient4905">
+      <stop
+         style="stop-color:#005a00;stop-opacity:1"
+         offset="0"
+         id="stop4907" />
+      <stop
+         style="stop-color:#ebffea;stop-opacity:1;"
+         offset="1"
+         id="stop4909" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3759"
+         d="M 0,0 L 5,-5 L -12.5,0 L 5,5 L 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Mend"
+       style="overflow:visible">
+      <path
+         id="path3786"
+         style="font-size:12px;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.97309,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z"
+         transform="scale(-0.6,-0.6)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         id="path3762"
+         d="M 0,0 L 5,-5 L -12.5,0 L 5,5 L 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 384 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1024 : 384 : 1"
+       inkscape:persp3d-origin="512 : 256 : 1"
+       id="perspective108" />
+    <inkscape:perspective
+       id="perspective4099"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4675"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4725"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4775"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4825"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4905"
+       id="linearGradient4911"
+       x1="480"
+       y1="68"
+       x2="480"
+       y2="108"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="576.86328"
+     inkscape:cy="382.58391"
+     inkscape:current-layer="layer17"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:grid-points="false"
+     gridtolerance="50"
+     inkscape:object-paths="false"
+     inkscape:grid-bbox="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:object-bbox="true"
+     inkscape:object-points="false"
+     inkscape:object-nodes="false"
+     objecttolerance="50"
+     inkscape:window-width="1388"
+     inkscape:window-height="1163"
+     inkscape:window-x="530"
+     inkscape:window-y="12"
+     guidetolerance="50"
+     inkscape:guide-points="true"
+     inkscape:snap-global="true">
+    <sodipodi:guide
+       orientation="vertical"
+       position="60.204837"
+       id="guide14140" />
+    <sodipodi:guide
+       orientation="horizontal"
+       position="679.87414"
+       id="guide14142" />
+    <sodipodi:guide
+       orientation="horizontal"
+       position="339.08042,599.6837"
+       id="guide14148" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="376,539"
+       id="guide2726" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="114.01394,818.82738"
+       id="guide2745" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="167.31916,804.02037"
+       id="guide2747" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="377,479"
+       id="guide2749" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="223.58578,821.78878"
+       id="guide2799" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid2898"
+       visible="true"
+       enabled="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2404">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="#_decoration below"
+     style="opacity:1;display:inline"
+     sodipodi:insensitive="true">
+    <rect
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.29644546;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect19387"
+       width="1025.2036"
+       height="769.20355"
+       x="-0.85177726"
+       y="-0.16677728"
+       rx="0"
+       ry="0" />
+    <path
+       style="fill:#ebffea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.29577112;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 1023.2042,108 L 1023.3521,731.53038 C 1023.3521,751.75513 1005.7487,768.03714 983.88249,768.03714 L 39.617505,768.03714 C 17.751336,768.03714 0.14788556,751.75513 0.14788556,731.53038 L 0,108 L 1023.2042,108 z"
+       id="rect2807"
+       sodipodi:nodetypes="ccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="511.21512"
+       y="741.30914"
+       id="text2403"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="511.21512"
+         y="741.30914"
+         style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan2407">Bart Trojanowski     http://www.jukie.net/~bart/     September 21, 2008</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#005a00;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 10,708 L 1015,708"
+       id="path4104"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;fill:url(#linearGradient4911);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.29577112;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 39.617505,0.83292079 L 983.88249,0.83292079 C 1005.7487,0.83292079 1023.3521,17.114937 1023.3521,37.339684 L 1023.2042,108 L 0,108 L 0,38 C 0,17.775253 17.751336,0.83292079 39.617505,0.83292079 z"
+       id="path4903"
+       sodipodi:nodetypes="ccccccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="#^decoration above"
+     sodipodi:insensitive="true">
+    <path
+       style="fill:#fdff00;fill-opacity:1;fill-rule:evenodd;stroke:#ffb700;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 1020,-2 L 790,-2 C 810,148 910,198 1020,208 L 1020,-2 z"
+       id="path4917"
+       sodipodi:nodetypes="cccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer20"
+     inkscape:label="#empty"
+     style="display:none" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer17"
+     inkscape:label="gama1^above_below"
+     style="display:inline">
+    <rect
+       style="opacity:1;fill:#fdff00;fill-opacity:1;fill-rule:evenodd;stroke:#a26e0e;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect5132"
+       width="278"
+       height="60"
+       x="416.5"
+       y="450.5" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="708.48828"
+       y="493.12891"
+       id="text5134"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="708.48828"
+         y="493.12891"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5136">this is below</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer16"
+     inkscape:label="gama1^above"
+     style="display:inline">
+    <rect
+       style="opacity:1;fill:#fdff00;fill-opacity:1;fill-rule:evenodd;stroke:#a26e0e;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect5119"
+       width="278"
+       height="60"
+       x="416.5"
+       y="350.5" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="708.48828"
+       y="393.12891"
+       id="text5121"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="708.48828"
+         y="393.12891"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5123">this is above</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer15"
+     inkscape:label="gama1_below"
+     style="display:none">
+    <rect
+       style="opacity:1;fill:#fdff00;fill-opacity:1;fill-rule:evenodd;stroke:#a26e0e;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect5105"
+       width="278"
+       height="60"
+       x="416.5"
+       y="350.5" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="708.48828"
+       y="393.12891"
+       id="text5107"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="708.48828"
+         y="393.12891"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5111">this is below</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer14"
+     inkscape:label="gama1"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text5087"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5093">- it is also possible to control the</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="228.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5100">   order of rendering the layers to slides</tspan></text>
+    <rect
+       style="opacity:1;fill:#fdff00;fill-opacity:1;fill-rule:evenodd;stroke:#a26e0e;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect5103"
+       width="69"
+       height="283"
+       x="474"
+       y="289" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer13"
+     inkscape:label="gama"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="60.204838"
+       y="88.125862"
+       id="text5082"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5084"
+         x="60.204838"
+         y="88.125862"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#fdff00;fill-opacity:1;stroke:#a26e0e;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">Gama</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer12"
+     inkscape:label="beta3.."
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="520.95703"
+       id="text5064"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="520.95703"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5070">- by default the substring layers will be</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="580.95703"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5077">   rendered first making the layer itself </tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="640.95703"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5079">   be on top</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer11"
+     inkscape:label="beta3."
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="347.12891"
+       id="text5038"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="347.12891"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5044">- this can be used recursively as 'beta3.'</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="407.12891"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5051">   include contents of layers 'beta3'</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="467.12891"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5053">   and '#beta' in addition to itself.</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="beta3"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text5025"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5029">- when generating each page</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="228.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5033">   of the presentation Negative just</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="288.31628"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5035">   searches for substrings in other layers</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     inkscape:label="beta2"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text5009"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5015">- this is useful for keeping the </tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="228.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5022">   title consistant over several slides</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer8"
+     inkscape:label="beta1"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text4988"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4992">- in this slide set the contents of</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="228.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4996">   the first layer '#beta' will be drawn</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="288.31628"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan5004">   below all layers that begin with 'beta'</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="#beta"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="60.204838"
+       y="88.125862"
+       id="text4984"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4986"
+         x="60.204838"
+         y="88.125862"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#fdff00;fill-opacity:1;stroke:#a26e0e;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">Beta</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="alpha2"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="60.204838"
+       y="88.125862"
+       id="text4968"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4970"
+         x="60.204838"
+         y="88.125862"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#fdff00;fill-opacity:1;stroke:#a26e0e;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">Alpha</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text4972"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4976">- where nothing is inherited</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="228.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4980">... and everything is repeated</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="alpha1"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="60.204838"
+       y="88.125862"
+       id="text4950"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4952"
+         x="60.204838"
+         y="88.125862"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#fdff00;fill-opacity:1;stroke:#a26e0e;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">Alpha</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text4954"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4960">- this is a regular slide set</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="TOC"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="60.204838"
+       y="88.125862"
+       id="text4927"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4929"
+         x="60.204838"
+         y="88.125862"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#fdff00;fill-opacity:1;stroke:#a26e0e;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">Table of Contents</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="114.01394"
+       y="168.3163"
+       id="text4931"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4933"
+         x="114.01394"
+         y="168.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial">- alpha</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="228.3163"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4937">- beta</tspan><tspan
+         sodipodi:role="line"
+         x="114.01394"
+         y="288.31628"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+         id="tspan4942">- gama</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Title"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="232.46999"
+       y="152.02859"
+       id="text5237"><tspan
+         sodipodi:role="line"
+         id="tspan5239"
+         x="232.46999"
+         y="152.02859" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="511.60938"
+       y="217.84877"
+       id="text5264"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5266"
+         x="511.60938"
+         y="217.84877"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial">Example Presentation</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="480.94531"
+       y="344.21539"
+       id="text2399"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2401"
+         x="480.94531"
+         y="344.21539"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial">in</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+       x="352.58594"
+       y="454.21484"
+       id="text4923"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4925"
+         x="352.58594"
+         y="454.21484"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#1b1b00;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">Negative</tspan></text>
+  </g>
+</svg>

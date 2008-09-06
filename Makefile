@@ -21,7 +21,7 @@ CCFLAGS = -I/usr/include/cairo \
 	  -I/usr/include/librsvg-2/librsvg/
 CFLAGS  = -Wall -O2 -ggdb
 
-LIBS    = -lrsvg-2 -lcairo
+LIBS    = -lrsvg-2 -lcairo -lpcre
 
 .PHONY: all
 all: ${TARGET}

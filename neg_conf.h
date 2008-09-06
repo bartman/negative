@@ -3,13 +3,7 @@
 
 #include <stdint.h>
 #include <string.h>
-
-enum neg_output_type {
-	NEG_OUT_SINGLE_PDF, // first one is the default
-	NEG_OUT_MANY_PDFS,
-	NEG_OUT_MANY_PNGS,
-	NEG_OUT_TYPE_MAX,
-};
+#include "neg_out.h"
 
 #define NEG_OUT_SIZE_DONT_CARE 0
 

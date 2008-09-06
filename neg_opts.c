@@ -16,7 +16,6 @@ extern enum neg_output_type fmt_name_to_enum(const char *name);
 int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 {
 	int argi;
-	enum neg_output_type type;
 
 	for (argi = 1; argi < argc; argi++) {
 		int cmd;
@@ -46,8 +45,8 @@ int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 			break;
 		case 'o':
 			argi++;
-			type = fmt_name_to_enum(argv[argi]);
-			if ((unsigned)type > NEG_OUT_TYPE_MAX)
+			conf->out.type = neg_get_output_type(argv[argi]);
+			if ((unsigned)conf->out.type > NEG_OUT_TYPE_MAX)
 				errx(1, "-o '%s' is invalid", argv[argi]);
 			break;
 		default:

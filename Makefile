@@ -1,7 +1,11 @@
 
 TARGET  = negative
-SRCS    = neg_main.c   \
-          neg_opts.c   \
+SRCS    = neg_main.c        \
+          neg_opts.c        \
+          neg_out.c         \
+	  neg_out_1pdf.c    \
+	  neg_out_pdfs.c    \
+	  neg_out_pngs.c    \
 	  neg_state.c
 
 OBJS    = ${SRCS:%.c=%.o}

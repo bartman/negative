@@ -10,6 +10,7 @@
 #include "neg_conf.h"
 #include "neg_opts.h"
 #include "neg_state.h"
+#include "neg_out.h"
 
 static struct fmt_name {
 	const char *name;
@@ -31,13 +32,6 @@ enum neg_output_type fmt_name_to_enum(const char *name)
 	return i;
 }
 
-static const char *fmt_enum_name(enum neg_output_type type)
-{
-	if (type < NEG_OUT_TYPE_MAX)
-		return fmt_name_table[type].name;
-	return NULL;
-}
-
 static const char *next_layer(const char *p)
 {
 	const char *comma = strchr(p, ',');
@@ -54,6 +48,7 @@ int main(int argc, char *argv[])
 	GError *err;
 	RsvgDimensionData rsvg_size;
 	struct neg_conf conf;
+	struct neg_output *out;
 
 	neg_program = argv[0];
 
@@ -67,12 +62,20 @@ int main(int argc, char *argv[])
 
 	rsvg_handle_get_dimensions(rsvg, &rsvg_size);
 
+	// {{{ TODO shoudl go into neg_set_defaults() or some such
 	if (!conf.out.width)
 		conf.out.width = rsvg_size.width;
 	if (!conf.out.height)
 		conf.out.height = rsvg_size.height;
+	if (!conf.out.name)
+		conf.out.name = "slide-%03u.%s";
+	// }}}
 
-	printf("format %s\n", fmt_enum_name(conf.out.type));
+	out = neg_get_output(conf.out.type);
+	if (!out)
+		errx(1, "Could not handler output type #%u", conf.out.type);
+
+	printf("format %s\n", out->name);
 	printf("input  %u x %u\n", rsvg_size.width, rsvg_size.height);
 	printf("output %u x %u\n", (unsigned)conf.out.width, (unsigned)conf.out.height);
 
@@ -82,7 +85,7 @@ int main(int argc, char *argv[])
 		const char *p;
 		char filename[sizeof("slide-%03i.xxx")];
 
-		sprintf(filename, "slide-%03i.%s", ++slide, fmt_enum_name(conf.out.type));
+		sprintf(filename, "slide-%03i.%s", ++slide, out->ext);
 		printf("%s\n", filename);
 
 		switch (conf.out.type) {
@@ -100,8 +103,7 @@ int main(int argc, char *argv[])
 			errx(1, "Unexpected format index %u", conf.out.type);
 		}
 		if (!csurf)
-			errx(1, "Could not create %s surface",
-					fmt_enum_name(conf.out.type));
+			errx(1, "Could not create %s surface", out->ext);
 		c = cairo_create(csurf);
 		if (!c)
 			errx(1, "Could not create cairo");

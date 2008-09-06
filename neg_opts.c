@@ -10,9 +10,6 @@
 #define _GNU_SOURCE
 #include <getopt.h>
 
-// this is going to go away soon
-extern enum neg_output_type fmt_name_to_enum(const char *name);
-
 int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 {
 	int argi;

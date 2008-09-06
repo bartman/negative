@@ -2,7 +2,6 @@
 #include <string.h>
 #include <strings.h>
 #include <cairo.h>
-#include <cairo-pdf.h>
 #include <rsvg.h>
 #include <rsvg-cairo.h>
 #include <stdlib.h>
@@ -11,26 +10,6 @@
 #include "neg_opts.h"
 #include "neg_state.h"
 #include "neg_out.h"
-
-static struct fmt_name {
-	const char *name;
-} fmt_name_table[NEG_OUT_TYPE_MAX+1] = {
-	[NEG_OUT_SINGLE_PDF] = { .name = "1pdf" },
-	[NEG_OUT_MANY_PDFS] = { .name = "pdf" },
-	[NEG_OUT_MANY_PNGS] = { .name = "png" },
-	[NEG_OUT_TYPE_MAX] = { .name = NULL },
-};
-
-enum neg_output_type fmt_name_to_enum(const char *name)
-{
-	enum neg_output_type i;
-
-	for (i=0; i<NEG_OUT_TYPE_MAX; i++) {
-		if (!strcasecmp(fmt_name_table[i].name, name))
-			break;
-	}
-	return i;
-}
 
 static const char *next_layer(const char *p)
 {
@@ -43,7 +22,6 @@ static const char *next_layer(const char *p)
 int main(int argc, char *argv[])
 {
 	int argi;
-	unsigned int slide = 0;
 	RsvgHandle *rsvg;
 	GError *err;
 	RsvgDimensionData rsvg_size;
@@ -86,31 +64,11 @@ int main(int argc, char *argv[])
 		cairo_surface_t* csurf;
 		cairo_t *c;
 		const char *p;
-		char filename[sizeof("slide-%03i.xxx")];
-
-		sprintf(filename, "slide-%03i.%s", ++slide, out->ext);
-		printf("%s\n", filename);
 
 		csurf = out->slide_start(ctx);
 
-#if 0
-		switch (conf.out.type) {
-		case NEG_OUT_MANY_PNGS:
-			csurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-					conf.out.width, conf.out.height);
-			break;
-
-		case NEG_OUT_MANY_PDFS:
-			csurf = cairo_pdf_surface_create(filename,
-					conf.out.width, conf.out.height);
-			break;
-
-		default:
-			errx(1, "Unexpected format index %u", conf.out.type);
-		}
-#endif
 		if (!csurf)
-			errx(1, "Could not create %s surface", out->ext);
+			errx(1, "Could not create %s surface", out->name);
 		c = cairo_create(csurf);
 		if (!c)
 			errx(1, "Could not create cairo");
@@ -129,24 +87,8 @@ int main(int argc, char *argv[])
 		}
 
 		if (! out->slide_end(ctx))
-			errx(1, "error writing out slide");
+			errx(1, "error writing out %s slide", out->name);
 
-#if 0
-		switch (conf.out.type) {
-		case NEG_OUT_MANY_PNGS:
-			if (cairo_surface_write_to_png(csurf, filename)
-					!= CAIRO_STATUS_SUCCESS)
-				errx(1, "writing out %s", filename);
-			break;
-
-		case NEG_OUT_MANY_PDFS:
-			cairo_surface_flush(csurf);
-			break;
-
-		default:
-			errx(1, "Unexpected format index %u", conf.out.type);
-		}
-#endif
 		cairo_destroy(c);
 		cairo_surface_destroy(csurf);
 	}

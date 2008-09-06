@@ -18,7 +18,6 @@ typedef void* neg_output_ctx;
 
 struct neg_output {
 	const char *name;
-	const char *ext;    // TODO: remove, needs to be handled in handler methods
 
 	neg_output_ctx (*init)(struct neg_conf *conf);
 	cairo_surface_t* (*slide_start)(neg_output_ctx);

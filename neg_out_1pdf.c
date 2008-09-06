@@ -27,7 +27,6 @@ static bool neg_out_1pdf_exit(neg_output_ctx opaque)
 struct neg_output neg_out_1pdf =
 {
 	.name = "1pdf",
-	.ext = "pdf",
 
 	.init        = neg_out_1pdf_init,
 	.slide_start = neg_out_1pdf_slide_start,

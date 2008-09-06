@@ -67,7 +67,6 @@ static bool neg_out_pngs_exit(neg_output_ctx opaque)
 struct neg_output neg_out_pngs =
 {
 	.name = "pngs",
-	.ext = "png",
 
 	.init        = neg_out_pngs_init,
 	.slide_start = neg_out_pngs_slide_start,

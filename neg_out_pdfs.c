@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "neg_out.h"
+#include "neg_conf.h"
 
 static neg_output_ctx neg_out_pdfs_init(struct neg_conf *conf)
 {
@@ -13,14 +14,14 @@ static cairo_surface_t* neg_out_pdfs_slide_start(neg_output_ctx opaque)
 	return NULL;
 }
 
-static void neg_out_pdfs_slide_end(neg_output_ctx opaque)
+static bool neg_out_pdfs_slide_end(neg_output_ctx opaque)
 {
-	return;
+	return false;
 }
 
-static void neg_out_pdfs_exit(neg_output_ctx opaque)
+static bool neg_out_pdfs_exit(neg_output_ctx opaque)
 {
-	return;
+	return false;
 }
 
 struct neg_output neg_out_pdfs =

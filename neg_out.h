@@ -2,6 +2,7 @@
 #define __NEG_OUT_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <cairo.h>
 
 struct neg_conf;
@@ -21,8 +22,8 @@ struct neg_output {
 
 	neg_output_ctx (*init)(struct neg_conf *conf);
 	cairo_surface_t* (*slide_start)(neg_output_ctx);
-	void (*slide_end)(neg_output_ctx);
-	void (*exit)(neg_output_ctx);
+	bool (*slide_end)(neg_output_ctx);
+	bool (*exit)(neg_output_ctx);
 };
 
 extern enum neg_output_type neg_get_output_type(const char *name);

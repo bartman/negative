@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 	RsvgDimensionData rsvg_size;
 	struct neg_conf conf;
 	struct neg_output *out;
+	static neg_output_ctx *ctx;
 
 	neg_program = argv[0];
 
@@ -79,6 +80,8 @@ int main(int argc, char *argv[])
 	printf("input  %u x %u\n", rsvg_size.width, rsvg_size.height);
 	printf("output %u x %u\n", (unsigned)conf.out.width, (unsigned)conf.out.height);
 
+	ctx = out->init(&conf);
+
 	for (; argi < argc; argi++) {
 		cairo_surface_t* csurf;
 		cairo_t *c;
@@ -88,6 +91,9 @@ int main(int argc, char *argv[])
 		sprintf(filename, "slide-%03i.%s", ++slide, out->ext);
 		printf("%s\n", filename);
 
+		csurf = out->slide_start(ctx);
+
+#if 0
 		switch (conf.out.type) {
 		case NEG_OUT_MANY_PNGS:
 			csurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
@@ -102,6 +108,7 @@ int main(int argc, char *argv[])
 		default:
 			errx(1, "Unexpected format index %u", conf.out.type);
 		}
+#endif
 		if (!csurf)
 			errx(1, "Could not create %s surface", out->ext);
 		c = cairo_create(csurf);
@@ -121,6 +128,10 @@ int main(int argc, char *argv[])
 			rsvg_handle_render_cairo_sub(rsvg, c, id);
 		}
 
+		if (! out->slide_end(ctx))
+			errx(1, "error writing out slide");
+
+#if 0
 		switch (conf.out.type) {
 		case NEG_OUT_MANY_PNGS:
 			if (cairo_surface_write_to_png(csurf, filename)
@@ -135,8 +146,10 @@ int main(int argc, char *argv[])
 		default:
 			errx(1, "Unexpected format index %u", conf.out.type);
 		}
+#endif
 		cairo_destroy(c);
 		cairo_surface_destroy(csurf);
 	}
+	out->exit(ctx);
 	return 0;
 }

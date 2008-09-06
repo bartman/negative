@@ -12,7 +12,7 @@
 
 static void dump_help(int rc, const char *argv0)
 {
-	printf("%s [-h] [-x <width>] [-y <height>] [-o png|pdf] <input>\n",
+	printf("%s [-h] [-x <width>] [-y <height>] [-o pngs|pdfs] <input>\n",
 			argv0);
 	exit(rc);
 }

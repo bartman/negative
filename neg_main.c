@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 
 	neg_conf_init(&conf);
 	argi = neg_parse_cmdline(&conf, argc, argv);
-	conf.out.type = NEG_RNDR_MANY_PNGS;
 
 	rsvg_init();
 	rsvg = rsvg_handle_new_from_file(conf.in.name, &err);

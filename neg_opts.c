@@ -10,9 +10,19 @@
 #define _GNU_SOURCE
 #include <getopt.h>
 
+static void dump_help(int rc, const char *argv0)
+{
+	printf("%s [-h] [-x <width>] [-y <height>] [-o png|pdf] <input>\n",
+			argv0);
+	exit(rc);
+}
+
 int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 {
 	int argi;
+
+	if (argc < 2)
+		errx(1, "Insufficient arguments, see %s -h.", argv[0]);
 
 	for (argi = 1; argi < argc; argi++) {
 		int cmd;
@@ -25,9 +35,7 @@ int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 
 		switch (cmd) {
 		case 'h':
-			printf("%s [-h] [-x <width>] [-y <height>] [-o png|pdf]\n",
-					argv[0]);
-			return 0;
+			dump_help(0, argv[0]);
 		case 'x':
 			argi++;
 			conf->out.width = atoi(argv[argi]);

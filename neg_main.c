@@ -10,6 +10,7 @@
 #include "neg_opts.h"
 #include "neg_state.h"
 #include "neg_rndr.h"
+#include "neg_load_rsvg.h"
 
 static const char *next_layer(const char *p)
 {
@@ -23,7 +24,6 @@ int main(int argc, char *argv[])
 {
 	int argi;
 	RsvgHandle *rsvg;
-	GError *err;
 	RsvgDimensionData rsvg_size;
 	struct neg_conf conf;
 	struct neg_render *rndr;
@@ -34,10 +34,7 @@ int main(int argc, char *argv[])
 	neg_conf_init(&conf);
 	argi = neg_parse_cmdline(&conf, argc, argv);
 
-	rsvg_init();
-	rsvg = rsvg_handle_new_from_file(conf.in.name, &err);
-	if (!rsvg)
-		errx(1, "Could not load file %s", conf.in.name);
+	rsvg = neg_load_rsvg(conf.in.name);
 
 	rsvg_handle_get_dimensions(rsvg, &rsvg_size);
 
@@ -56,7 +53,8 @@ int main(int argc, char *argv[])
 
 	printf("format %s\n", rndr->name);
 	printf("input  %u x %u\n", rsvg_size.width, rsvg_size.height);
-	printf("output %u x %u\n", (unsigned)conf.out.width, (unsigned)conf.out.height);
+	printf("output %u x %u\n", (unsigned)conf.out.width,
+			(unsigned)conf.out.height);
 
 	ctx = rndr->init(&conf);
 

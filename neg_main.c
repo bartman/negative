@@ -9,7 +9,7 @@
 #include "neg_conf.h"
 #include "neg_opts.h"
 #include "neg_state.h"
-#include "neg_out.h"
+#include "neg_rndr.h"
 
 static const char *next_layer(const char *p)
 {
@@ -26,14 +26,14 @@ int main(int argc, char *argv[])
 	GError *err;
 	RsvgDimensionData rsvg_size;
 	struct neg_conf conf;
-	struct neg_output *out;
-	static neg_output_ctx *ctx;
+	struct neg_render *rndr;
+	static neg_render_ctx *ctx;
 
 	neg_program = argv[0];
 
 	neg_conf_init(&conf);
 	argi = neg_parse_cmdline(&conf, argc, argv);
-	conf.out.type = NEG_OUT_MANY_PNGS;
+	conf.out.type = NEG_RNDR_MANY_PNGS;
 
 	rsvg_init();
 	rsvg = rsvg_handle_new_from_file(conf.in.name, &err);
@@ -51,25 +51,25 @@ int main(int argc, char *argv[])
 		conf.out.name = "slide-%03u.%s";
 	// }}}
 
-	out = neg_get_output(conf.out.type);
-	if (!out)
+	rndr = neg_get_renderer(conf.out.type);
+	if (!rndr)
 		errx(1, "Could not handler output type #%u", conf.out.type);
 
-	printf("format %s\n", out->name);
+	printf("format %s\n", rndr->name);
 	printf("input  %u x %u\n", rsvg_size.width, rsvg_size.height);
 	printf("output %u x %u\n", (unsigned)conf.out.width, (unsigned)conf.out.height);
 
-	ctx = out->init(&conf);
+	ctx = rndr->init(&conf);
 
 	for (; argi < argc; argi++) {
 		cairo_surface_t* csurf;
 		cairo_t *c;
 		const char *p;
 
-		csurf = out->slide_start(ctx);
+		csurf = rndr->slide_start(ctx);
 
 		if (!csurf)
-			errx(1, "Could not create %s surface", out->name);
+			errx(1, "Could not create %s surface", rndr->name);
 		c = cairo_create(csurf);
 		if (!c)
 			errx(1, "Could not create cairo");
@@ -87,12 +87,12 @@ int main(int argc, char *argv[])
 			rsvg_handle_render_cairo_sub(rsvg, c, id);
 		}
 
-		if (! out->slide_end(ctx))
-			errx(1, "error writing out %s slide", out->name);
+		if (! rndr->slide_end(ctx))
+			errx(1, "error writing out %s slide", rndr->name);
 
 		cairo_destroy(c);
 		cairo_surface_destroy(csurf);
 	}
-	out->exit(ctx);
+	rndr->exit(ctx);
 	return 0;
 }

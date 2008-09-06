@@ -50,8 +50,8 @@ int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 			break;
 		case 'o':
 			argi++;
-			conf->out.type = neg_get_output_type(argv[argi]);
-			if ((unsigned)conf->out.type > NEG_OUT_TYPE_MAX)
+			conf->out.type = neg_get_render_type(argv[argi]);
+			if ((unsigned)conf->out.type > NEG_RNDR_TYPE_MAX)
 				errx(1, "-o '%s' is invalid", argv[argi]);
 			break;
 		default:

@@ -4,10 +4,10 @@
 
 #include <cairo-pdf.h>
 
-#include "neg_out.h"
+#include "neg_rndr.h"
 #include "neg_conf.h"
 
-struct neg_output_ctx {
+struct neg_render_ctx {
 	struct neg_conf *conf;
 
 	// per slide info
@@ -17,9 +17,9 @@ struct neg_output_ctx {
 	cairo_surface_t *csurf;  // the current cairo surface
 };
 
-static neg_output_ctx neg_out_pdfs_init(struct neg_conf *conf)
+static neg_render_ctx neg_rndr_pdfs_init(struct neg_conf *conf)
 {
-	struct neg_output_ctx *ctx;
+	struct neg_render_ctx *ctx;
 	unsigned fnsize;
 
 	fnsize = strlen(conf->out.name)
@@ -36,9 +36,9 @@ static neg_output_ctx neg_out_pdfs_init(struct neg_conf *conf)
 	return ctx;
 }
 
-static cairo_surface_t* neg_out_pdfs_slide_start(neg_output_ctx opaque)
+static cairo_surface_t* neg_rndr_pdfs_slide_start(neg_render_ctx opaque)
 {
-	struct neg_output_ctx *ctx = opaque;
+	struct neg_render_ctx *ctx = opaque;
 
 	snprintf(ctx->filename, ctx->fnsize, ctx->conf->out.name,
 			++ctx->slide, "pdf");
@@ -50,29 +50,29 @@ static cairo_surface_t* neg_out_pdfs_slide_start(neg_output_ctx opaque)
 	return ctx->csurf;
 }
 
-static bool neg_out_pdfs_slide_end(neg_output_ctx opaque)
+static bool neg_rndr_pdfs_slide_end(neg_render_ctx opaque)
 {
-	struct neg_output_ctx *ctx = opaque;
+	struct neg_render_ctx *ctx = opaque;
 
 	cairo_surface_flush(ctx->csurf);
 
 	return true;
 }
 
-static bool neg_out_pdfs_exit(neg_output_ctx opaque)
+static bool neg_rndr_pdfs_exit(neg_render_ctx opaque)
 {
-	struct neg_output_ctx *ctx = opaque;
+	struct neg_render_ctx *ctx = opaque;
 
 	free(ctx);
 	return true;
 }
 
-struct neg_output neg_out_pdfs =
+struct neg_render neg_rndr_pdfs =
 {
 	.name = "pdfs",
 
-	.init        = neg_out_pdfs_init,
-	.slide_start = neg_out_pdfs_slide_start,
-	.slide_end   = neg_out_pdfs_slide_end,
-	.exit        = neg_out_pdfs_exit,
+	.init        = neg_rndr_pdfs_init,
+	.slide_start = neg_rndr_pdfs_slide_start,
+	.slide_end   = neg_rndr_pdfs_slide_end,
+	.exit        = neg_rndr_pdfs_exit,
 };

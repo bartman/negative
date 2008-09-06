@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <string.h>
-#include "neg_out.h"
+#include "neg_rndr.h"
 
 #define NEG_OUT_SIZE_DONT_CARE 0
 
@@ -13,7 +13,7 @@ struct neg_conf {
 	} in;
 	struct {
 		const char *name;
-		enum neg_output_type type;
+		enum neg_render_type type;
 		double width, height;
 	} out;
 };

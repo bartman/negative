@@ -4,32 +4,24 @@
 
 #include "neg_rndr.h"
 #include "neg_conf.h"
+#include "neg_file_util.h"
 
 struct neg_render_ctx {
 	struct neg_conf *conf;
 
 	// per slide info
-	int slide;               // which slide we are on
-	unsigned fnsize;         // size of filename
-	char *filename;          // the current filename
-	cairo_surface_t *csurf;  // the current cairo surface
+	struct neg_filename fn; // tracks the filename
+	cairo_surface_t *csurf; // current cairo surface
 };
 
 static neg_render_ctx neg_rndr_pngs_init(struct neg_conf *conf)
 {
 	struct neg_render_ctx *ctx;
-	unsigned fnsize;
 
-	fnsize = strlen(conf->out.name)
-		+ 9   // digits in the largest '%u' that we will see
-		+ 3   // the extenssion
-		+ 10; // null termination and fluff
-
-	ctx = calloc(1, sizeof(*ctx) + fnsize);
+	ctx = calloc(1, sizeof(*ctx));
 
 	ctx->conf = conf;
-	ctx->fnsize = fnsize;
-	ctx->filename = (void*)(ctx+1);
+	neg_filename_init(&ctx->fn, conf->out.name, "png");
 
 	return ctx;
 }
@@ -38,9 +30,9 @@ static cairo_surface_t* neg_rndr_pngs_slide_start(neg_render_ctx opaque)
 {
 	struct neg_render_ctx *ctx = opaque;
 
-	snprintf(ctx->filename, ctx->fnsize, ctx->conf->out.name,
-			++ctx->slide, "png");
-	printf("%s\n", ctx->filename);
+	const char *fn;
+	fn = neg_filename_next(&ctx->fn);
+	printf("%s\n", fn);
 
 	ctx->csurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
 			ctx->conf->out.width, ctx->conf->out.height);
@@ -53,8 +45,10 @@ static bool neg_rndr_pngs_slide_end(neg_render_ctx opaque)
 	struct neg_render_ctx *ctx = opaque;
 
 	cairo_status_t rc;
+	const char *fn;
+	fn = neg_filename_current(&ctx->fn);
 
-	rc = cairo_surface_write_to_png(ctx->csurf, ctx->filename);
+	rc = cairo_surface_write_to_png(ctx->csurf, fn);
 
 #if 0
 	fprintf(stderr, "cairo_surface_write_to_png: %s\n",
@@ -68,6 +62,7 @@ static bool neg_rndr_pngs_exit(neg_render_ctx opaque)
 {
 	struct neg_render_ctx *ctx = opaque;
 
+	neg_filename_exit(&ctx->fn);
 	free(ctx);
 	return true;
 }

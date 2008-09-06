@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 	if (!conf.out.height)
 		conf.out.height = rsvg_size.height;
 	if (!conf.out.name)
-		conf.out.name = "slide-%03u.%s";
+		conf.out.name = "slide-####";
 	// }}}
 
 	rndr = neg_get_renderer(conf.out.type);

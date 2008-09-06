@@ -47,22 +47,33 @@ void neg_filename_init(struct neg_filename *fn, const char *base,
 	fn->buffer[fn->base_len + 1 + fn->ext_len] = 0;
 
 	fn->index_max = (unsigned)pow(10,fn->index_len) - 1;
-	fn->index = 1;
+	fn->index = 0;
 }
 
 const char *neg_filename_next(struct neg_filename *fn)
 {
 	int rc;
+	int backup;
+
+	fn->index ++;
 
 	if (fn->index > fn->index_max)
 		errx(1, "Exhausted indices that can be fit into '%s', at %u.",
 				fn->base, fn->index);
 
-	rc = snprintf(fn->buffer + fn->index_ofs, fn->index_len, "%0*u",
+	// backup the character right after the #### pattern as it will be
+	// overwritten by snprintf's 0-termination
+	backup = fn->buffer[fn->index_ofs + fn->index_len];
+
+	// generate the name
+	rc = snprintf(fn->buffer + fn->index_ofs, fn->index_len+1, "%0*ux",
 			fn->index_len, fn->index);
-	if (rc != 1)
+	if (rc < 0)
 		errx(1, "Failed to generate file name for '%s' at index '%u'",
 				fn->base, fn->index);
+
+	// restore the character after the #### pattern
+	fn->buffer[fn->index_ofs + fn->index_len] = backup;
 
 	return fn->buffer;
 }

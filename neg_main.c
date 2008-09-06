@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
 	neg_program = argv[0];
 
+	neg_conf_init(&conf);
 	argi = neg_parse_cmdline(&conf, argc, argv);
 	conf.out.type = NEG_OUT_MANY_PNGS;
 

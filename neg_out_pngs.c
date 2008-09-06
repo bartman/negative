@@ -52,8 +52,16 @@ static bool neg_out_pngs_slide_end(neg_output_ctx opaque)
 {
 	struct neg_output_ctx *ctx = opaque;
 
-	return cairo_surface_write_to_png(ctx->csurf, ctx->filename)
-		== CAIRO_STATUS_SUCCESS;
+	cairo_status_t rc;
+
+	rc = cairo_surface_write_to_png(ctx->csurf, ctx->filename);
+
+#if 0
+	fprintf(stderr, "cairo_surface_write_to_png: %s\n",
+			cairo_status_to_string(rc));
+#endif
+
+	return rc == CAIRO_STATUS_SUCCESS;
 }
 
 static bool neg_out_pngs_exit(neg_output_ctx opaque)

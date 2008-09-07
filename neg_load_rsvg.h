@@ -3,6 +3,19 @@
 
 #include <rsvg.h>
 
-extern RsvgHandle *neg_load_rsvg(const char *name);
+struct neg_rsvg {
+	RsvgHandle *handle;
+	RsvgDimensionData size;
+
+	unsigned    layer_count;
+	struct neg_layer {
+		const char *id;
+		const char *label;
+	} **layers;
+};
+
+extern struct neg_rsvg *neg_rsvg_open(const char *name);
+
+extern void neg_rsvg_close(struct neg_rsvg *rsvg);
 
 #endif

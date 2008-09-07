@@ -18,7 +18,12 @@
 #define MATCH_ID    "^[\t ]*id=\"(layer.*)\""
 #define MATCH_LABEL "^[\t ]*inkscape:label=\"(.*)\""
 
-static void build_layer_info(char *in, char *end)
+static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
+{
+	// TODO
+}
+
+static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 {
 	char *p;
 	pcre *re_id, *re_label;
@@ -74,6 +79,8 @@ static void build_layer_info(char *in, char *end)
 				ovector[2], ovector[3],
 				id, label);
 
+		add_layer(rsvg, id, label);
+
 		free(label);
 		free(id);
 
@@ -120,16 +127,21 @@ static void rewrite_display_inline(char *in, char *end, int fd_out)
 	write(fd_out, p, end-p);
 }
 
-RsvgHandle *neg_load_rsvg(const char *name)
+struct neg_rsvg *neg_rsvg_open(const char *name)
 {
 	GError *err;
-	RsvgHandle *rsvg;
+	struct neg_rsvg *rsvg;
 	int fd_in;
 	struct stat stat;
 	int fd_tmp;
 	char tempfilename[] = "/tmp/negative-XXXXXX";
 	int rc;
 	char *inmm, *end;
+
+	rsvg = calloc(1, sizeof(*rsvg));
+	if (!rsvg)
+		errx(1, "Could not allocate buffer: %s",
+				strerror(errno));
 
 	fd_in = open(name, O_RDONLY);
 	if (fd_in < 0)
@@ -153,17 +165,19 @@ RsvgHandle *neg_load_rsvg(const char *name)
 		errx(1, "Could not create a temporary file in /tmp/: %s",
 				strerror(errno));
 
-	build_layer_info(inmm, end);
+	build_layer_info(rsvg, inmm, end);
 
 	rewrite_display_inline(inmm, end, fd_tmp);
 	close(fd_tmp);
 
 	rsvg_init();
-	rsvg = rsvg_handle_new_from_file(tempfilename, &err);
-	if (!rsvg)
+	rsvg->handle = rsvg_handle_new_from_file(tempfilename, &err);
+	if (!rsvg->handle)
 		errx(1, "Could not load file %s", name);
 
 	unlink(tempfilename);
+
+	rsvg_handle_get_dimensions(rsvg->handle, &rsvg->size);
 
 	return rsvg;
 }

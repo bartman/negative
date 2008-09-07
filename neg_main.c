@@ -23,8 +23,7 @@ static const char *next_layer(const char *p)
 int main(int argc, char *argv[])
 {
 	int argi;
-	RsvgHandle *rsvg;
-	RsvgDimensionData rsvg_size;
+	struct neg_rsvg *rsvg;
 	struct neg_conf conf;
 	struct neg_render *rndr;
 	static neg_render_ctx *ctx;
@@ -34,15 +33,13 @@ int main(int argc, char *argv[])
 	neg_conf_init(&conf);
 	argi = neg_parse_cmdline(&conf, argc, argv);
 
-	rsvg = neg_load_rsvg(conf.in.name);
-
-	rsvg_handle_get_dimensions(rsvg, &rsvg_size);
+	rsvg = neg_rsvg_open(conf.in.name);
 
 	// {{{ TODO shoudl go into neg_set_defaults() or some such
 	if (!conf.out.width)
-		conf.out.width = rsvg_size.width;
+		conf.out.width = rsvg->size.width;
 	if (!conf.out.height)
-		conf.out.height = rsvg_size.height;
+		conf.out.height = rsvg->size.height;
 	if (!conf.out.name)
 		conf.out.name = "slide-####";
 	// }}}
@@ -52,7 +49,7 @@ int main(int argc, char *argv[])
 		errx(1, "Could not handler output type #%u", conf.out.type);
 
 	printf("format %s\n", rndr->name);
-	printf("input  %u x %u\n", rsvg_size.width, rsvg_size.height);
+	printf("input  %u x %u\n", rsvg->size.width, rsvg->size.height);
 	printf("output %u x %u\n", (unsigned)conf.out.width,
 			(unsigned)conf.out.height);
 
@@ -71,8 +68,8 @@ int main(int argc, char *argv[])
 		if (!c)
 			errx(1, "Could not create cairo");
 
-		cairo_scale(c, conf.out.width/rsvg_size.width,
-				conf.out.height/rsvg_size.height);
+		cairo_scale(c, conf.out.width/rsvg->size.width,
+				conf.out.height/rsvg->size.height);
 
 		for (p = argv[argi]; p; p = next_layer(p)) {
 			char id[1 + strcspn(p, ",") + 1];
@@ -81,7 +78,7 @@ int main(int argc, char *argv[])
 			id[1+strcspn(p, ",")] = '\0';
 
 			printf(" - %s\n", id);
-			rsvg_handle_render_cairo_sub(rsvg, c, id);
+			rsvg_handle_render_cairo_sub(rsvg->handle, c, id);
 		}
 
 		if (! rndr->slide_end(ctx))

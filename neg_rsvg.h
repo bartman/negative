@@ -1,5 +1,5 @@
-#ifndef __NEG_LOAD_RSVG_H__
-#define __NEG_LOAD_RSVG_H__
+#ifndef __NEG_RSVG_H__
+#define __NEG_RSVG_H__
 
 #include <rsvg.h>
 

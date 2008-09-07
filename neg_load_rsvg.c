@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <err.h>
 #include <string.h>
 #include <strings.h>
@@ -14,9 +15,77 @@
 
 #define OVECCOUNT 30
 
+#define MATCH_ID    "^[\t ]*id=\"(layer.*)\""
+#define MATCH_LABEL "^[\t ]*inkscape:label=\"(.*)\""
+
+static void build_layer_info(char *in, char *end)
+{
+	char *p;
+	pcre *re_id, *re_label;
+	const char *error;
+	int erroffset;
+	int rc;
+	int ovector[OVECCOUNT] = {0,};
+
+	re_id = pcre_compile(MATCH_ID, PCRE_MULTILINE,
+			&error, &erroffset, NULL);
+	if (!re_id)
+		errx(1, "Internal regular expression error at %u: %s.",
+				erroffset, error);
+
+	re_label = pcre_compile(MATCH_LABEL, PCRE_MULTILINE,
+			&error, &erroffset, NULL);
+	if (!re_id)
+		errx(1, "Internal regular expression error at %u: %s.",
+				erroffset, error);
+
+	for (p=in; p<end; ) {
+
+		char *id, *label;
+
+		// find id
+
+		rc = pcre_exec(re_id, NULL, p, end-p, 0, 0,
+				ovector, OVECCOUNT);
+		if (rc == PCRE_ERROR_NOMATCH)
+			break;
+		if (rc <= 0)
+			errx(1, "Regular expression error %d.", rc);
+
+		id = strndup(p + ovector[2], ovector[3] - ovector[2]);
+
+		p += ovector[1];
+
+		// find label
+
+		rc = pcre_exec(re_label, NULL, p, end-p, 0, 0,
+				ovector, OVECCOUNT);
+		if (rc == PCRE_ERROR_NOMATCH)
+			break;
+		if (rc <= 0)
+			errx(1, "Regular expression error %d.", rc);
+
+		label = strndup(p + ovector[2], ovector[3] - ovector[2]);
+
+		// dump
+
+		printf ("- %4u,%4u,%4u,%4u %9s...%s\n",
+				ovector[0], ovector[1],
+				ovector[2], ovector[3],
+				id, label);
+
+		free(label);
+		free(id);
+
+		p += ovector[1];
+	}
+
+	pcre_free(re_label);
+	pcre_free(re_id);
+}
+
 #define DISPLAY_NONE "display:none"
 #define DISPLAY_INLINE "display:inline"
-
 
 static void rewrite_display_inline(char *in, char *end, int fd_out)
 {
@@ -83,6 +152,8 @@ RsvgHandle *neg_load_rsvg(const char *name)
 	if (fd_tmp < 0)
 		errx(1, "Could not create a temporary file in /tmp/: %s",
 				strerror(errno));
+
+	build_layer_info(inmm, end);
 
 	rewrite_display_inline(inmm, end, fd_tmp);
 	close(fd_tmp);

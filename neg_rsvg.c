@@ -105,6 +105,95 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 	pcre_free(re_id);
 }
 
+static void process_layer_info(struct neg_rsvg *rsvg)
+{
+	int i, j;
+	const char *p;
+	unsigned *always_above, always_above_count;
+	unsigned *always_below, always_below_count;
+
+	// allocate arrays for sticky indeces
+	always_above = calloc(rsvg->layer_count, sizeof(always_above[0]));
+	always_below = calloc(rsvg->layer_count, sizeof(always_below[0]));
+	always_above_count = always_below_count = 0;
+
+	for (i=0; i<rsvg->layer_count; i++) {
+		struct neg_layer *lyr = &rsvg->layers[i];
+
+		lyr->flags = 0;
+
+		p = lyr->label;
+		while(*p) {
+			if (*p == '#') {
+				lyr->flags |= NEG_LAYER_HIDDEN;
+			} else if (*p == '^') {
+				lyr->flags |= NEG_LAYER_STICKY_ABOVE;
+				always_above[always_above_count++] = i;
+			} else if (*p == '_') {
+				lyr->flags |= NEG_LAYER_STICKY_BELOW;
+				always_below[always_below_count++] = i;
+			} else
+				break;
+			p++;
+		}
+		lyr->name = strdup(p);
+		lyr->name_len = strlen(lyr->name);
+	}
+
+	for (i=0; i<rsvg->layer_count; i++) {
+		struct neg_layer *lyr = &rsvg->layers[i];
+
+		if (lyr->flags & NEG_LAYER_HIDDEN)
+			continue;
+
+		lyr->order = calloc(rsvg->layer_count, sizeof(lyr->order[0]));
+		memcpy(lyr->order, always_below,
+				sizeof(lyr->order[0]) * always_below_count);
+		lyr->order_count = always_below_count;
+
+		lyr->order[lyr->order_count++] = i;
+
+		for(j=0; j<rsvg->layer_count; j++) {
+			struct neg_layer *sub = &rsvg->layers[j];
+
+			if (i == j)
+				continue;
+
+			if (sub->name_len > lyr->name_len
+					|| strncmp(lyr->name, sub->name,
+						sub->name_len))
+				continue;
+
+			// found a sub layer that has a name that's a prefix
+			// of our layer
+
+			lyr->order[lyr->order_count++] = j;
+		}
+
+		memcpy(&lyr->order[lyr->order_count], always_above,
+				sizeof(lyr->order[0]) * always_above_count);
+		lyr->order_count += always_above_count;
+	}
+
+	for (i=rsvg->layer_count-1; i>=0; i--) {
+		struct neg_layer *lyr = &rsvg->layers[i];
+
+		if (lyr->flags & NEG_LAYER_HIDDEN)
+			continue;
+
+		printf("- %s : ", lyr->name);
+
+		for(j=0; j<lyr->order_count; j++) {
+			int order = lyr->order[j];
+			struct neg_layer *ord = &rsvg->layers[order];
+
+			printf("%s, ", ord->name);
+		}
+
+		printf("\n");
+	}
+}
+
 #define DISPLAY_NONE "display:none"
 #define DISPLAY_INLINE "display:inline"
 
@@ -181,6 +270,8 @@ struct neg_rsvg *neg_rsvg_open(const char *name)
 
 	build_layer_info(rsvg, inmm, end);
 
+	process_layer_info(rsvg);
+
 	rewrite_display_inline(inmm, end, fd_tmp);
 	close(fd_tmp);
 
@@ -203,6 +294,7 @@ void neg_rsvg_close(struct neg_rsvg *rsvg)
 	for (i=0; i<rsvg->layer_count; i++) {
 		free((void*)rsvg->layers[i].id);
 		free((void*)rsvg->layers[i].label);
+		free((void*)rsvg->layers[i].name);
 	}
 	free(rsvg->layers);
 	free(rsvg);

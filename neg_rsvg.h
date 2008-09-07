@@ -7,11 +7,12 @@ struct neg_rsvg {
 	RsvgHandle *handle;
 	RsvgDimensionData size;
 
-	unsigned    layer_count;
+	unsigned    layer_count;        // how many we have
+	unsigned    layer_size;         // how many we allocated for
 	struct neg_layer {
 		const char *id;
 		const char *label;
-	} **layers;
+	} *layers;
 };
 
 extern struct neg_rsvg *neg_rsvg_open(const char *name);

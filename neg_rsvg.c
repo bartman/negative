@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <pcre.h>
 
-#include "neg_load_rsvg.h"
+#include "neg_rsvg.h"
 
 #define OVECCOUNT 30
 
@@ -20,7 +20,24 @@
 
 static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 {
-	// TODO
+	int index;
+
+	index = rsvg->layer_count ++;
+
+	if (index >= rsvg->layer_size) {
+
+		rsvg->layer_size += 10; // at least 10 more entries 
+		rsvg->layer_size *= 2;  // at least 2x the previous size
+
+		rsvg->layers = realloc(rsvg->layers,
+				rsvg->layer_size * sizeof(rsvg->layers[0]));
+		if (!rsvg)
+			errx(1, "Could not allocate buffer: %s",
+					strerror(errno));
+	}
+
+	rsvg->layers[index].id = id;
+	rsvg->layers[index].label = label;
 }
 
 static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
@@ -80,9 +97,6 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 				id, label);
 
 		add_layer(rsvg, id, label);
-
-		free(label);
-		free(id);
 
 		p += ovector[1];
 	}
@@ -180,4 +194,16 @@ struct neg_rsvg *neg_rsvg_open(const char *name)
 	rsvg_handle_get_dimensions(rsvg->handle, &rsvg->size);
 
 	return rsvg;
+}
+
+void neg_rsvg_close(struct neg_rsvg *rsvg)
+{
+	int i;
+
+	for (i=0; i<rsvg->layer_count; i++) {
+		free((void*)rsvg->layers[i].id);
+		free((void*)rsvg->layers[i].label);
+	}
+	free(rsvg->layers);
+	free(rsvg);
 }

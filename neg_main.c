@@ -10,7 +10,7 @@
 #include "neg_opts.h"
 #include "neg_state.h"
 #include "neg_rndr.h"
-#include "neg_load_rsvg.h"
+#include "neg_rsvg.h"
 
 static const char *next_layer(const char *p)
 {
@@ -88,5 +88,6 @@ int main(int argc, char *argv[])
 		cairo_surface_destroy(csurf);
 	}
 	rndr->exit(ctx);
+	neg_rsvg_close(rsvg);
 	return 0;
 }

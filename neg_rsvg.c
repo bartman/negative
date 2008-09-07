@@ -91,10 +91,12 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 
 		// dump
 
+#if 0
 		printf ("- %4u,%4u,%4u,%4u %9s...%s\n",
 				ovector[0], ovector[1],
 				ovector[2], ovector[3],
 				id, label);
+#endif
 
 		add_layer(rsvg, id, label);
 
@@ -175,6 +177,7 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 		lyr->order_count += always_above_count;
 	}
 
+#if 0
 	for (i=rsvg->layer_count-1; i>=0; i--) {
 		struct neg_layer *lyr = &rsvg->layers[i];
 
@@ -192,6 +195,7 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 
 		printf("\n");
 	}
+#endif
 }
 
 #define DISPLAY_NONE "display:none"

@@ -12,17 +12,9 @@
 #include "neg_rndr.h"
 #include "neg_rsvg.h"
 
-static const char *next_layer(const char *p)
-{
-	const char *comma = strchr(p, ',');
-	if (!comma)
-		return NULL;
-	return comma+1;
-}
-
 int main(int argc, char *argv[])
 {
-	int argi;
+	int i, j, rc;
 	struct neg_rsvg *rsvg;
 	struct neg_conf conf;
 	struct neg_render *rndr;
@@ -31,7 +23,9 @@ int main(int argc, char *argv[])
 	neg_program = argv[0];
 
 	neg_conf_init(&conf);
-	argi = neg_parse_cmdline(&conf, argc, argv);
+	rc = neg_parse_cmdline(&conf, argc, argv);
+	if (rc != argc)
+		errx(1, "Garbage at end of cmdline, see %s -h.", neg_program);
 
 	rsvg = neg_rsvg_open(conf.in.name);
 
@@ -55,12 +49,17 @@ int main(int argc, char *argv[])
 
 	ctx = rndr->init(&conf);
 
-	for (; argi < argc; argi++) {
+	for (i = rsvg->layer_count-1; i>=0; i--) {
+		struct neg_layer *lyr = &rsvg->layers[i];
 		cairo_surface_t* csurf;
 		cairo_t *c;
-		const char *p;
+
+		if (lyr->flags & NEG_LAYER_HIDDEN)
+			continue;
 
 		csurf = rndr->slide_start(ctx);
+
+		printf("  * %s : ", lyr->name);
 
 		if (!csurf)
 			errx(1, "Could not create %s surface", rndr->name);
@@ -71,15 +70,20 @@ int main(int argc, char *argv[])
 		cairo_scale(c, conf.out.width/rsvg->size.width,
 				conf.out.height/rsvg->size.height);
 
-		for (p = argv[argi]; p; p = next_layer(p)) {
-			char id[1 + strcspn(p, ",") + 1];
-			id[0] = '#';
-			memcpy(id+1, p, strcspn(p, ","));
-			id[1+strcspn(p, ",")] = '\0';
+		for(j=0; j<lyr->order_count; j++) {
+			int order = lyr->order[j];
+			struct neg_layer *ord = &rsvg->layers[order];
+			char id[strlen(ord->id)+2];
 
-			printf(" - %s\n", id);
+			printf("%s, ", ord->name);
+
+			id[0] = '#';
+			strcpy(id+1, ord->id);
+
 			rsvg_handle_render_cairo_sub(rsvg->handle, c, id);
 		}
+
+		printf("\n");
 
 		if (! rndr->slide_end(ctx))
 			errx(1, "error writing out %s slide", rndr->name);

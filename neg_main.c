@@ -70,8 +70,8 @@ int main(int argc, char *argv[])
 		cairo_scale(c, conf.out.width/rsvg->size.width,
 				conf.out.height/rsvg->size.height);
 
-		for(j=0; j<lyr->order_count; j++) {
-			int order = lyr->order[j];
+		for(j=0; j<lyr->order->count; j++) {
+			unsigned order = lyr->order->array[j];
 			struct neg_layer *ord = &rsvg->layers[order];
 			char id[strlen(ord->id)+2];
 

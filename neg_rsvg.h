@@ -4,10 +4,27 @@
 #include <rsvg.h>
 
 enum neg_layer_flags {
+	// extracted from svg
 	NEG_LAYER_HIDDEN       = 0x0001,
 	NEG_LAYER_STICKY_ABOVE = 0x0002,
 	NEG_LAYER_STICKY_BELOW = 0x0004,
+	// state tracking
+	NEG_LAYER_RESOLVING    = 0x4000,
+	NEG_LAYER_RESOLVED     = 0x8000,
 };
+#define NEG_LAYER_STICKY (NEG_LAYER_STICKY_ABOVE | NEG_LAYER_STICKY_BELOW)
+
+struct neg_order {
+	unsigned size;
+	unsigned count;
+	unsigned array[0];
+};
+
+extern struct neg_order *neg_order_new(unsigned size);
+extern void neg_order_free(struct neg_order *);
+extern void neg_order_add(struct neg_order *, unsigned);
+extern void neg_order_copy(struct neg_order *, const struct neg_order *);
+extern void neg_order_append(struct neg_order *, const struct neg_order *);
 
 struct neg_rsvg {
 	RsvgHandle *handle;
@@ -24,14 +41,15 @@ struct neg_rsvg {
 		const char           *name;
 		unsigned             name_len;
 		enum neg_layer_flags flags;
-		unsigned             *order;
-		unsigned             order_count;
+		struct neg_order     *local; // before sticky layers
+		struct neg_order     *order; // includes sticky layers
 	} *layers;
 
+	struct neg_order *sticky_below;
+	struct neg_order *sticky_above;
 };
 
 extern struct neg_rsvg *neg_rsvg_open(const char *name);
-
 extern void neg_rsvg_close(struct neg_rsvg *rsvg);
 
 #endif

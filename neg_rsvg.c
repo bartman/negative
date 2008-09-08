@@ -21,12 +21,13 @@
 static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 {
 	int index;
+	struct neg_layer *lyr;
 
 	index = rsvg->layer_count ++;
 
-	if (index >= rsvg->layer_size) {
+	if (!rsvg->layers || index >= rsvg->layer_size) {
 
-		rsvg->layer_size += 10; // at least 10 more entries 
+		rsvg->layer_size += 10; // at least 10 more entries
 		rsvg->layer_size *= 2;  // at least 2x the previous size
 
 		rsvg->layers = realloc(rsvg->layers,
@@ -35,6 +36,10 @@ static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 			errx(1, "Could not allocate buffer: %s",
 					strerror(errno));
 	}
+
+	lyr = &rsvg->layers[index];
+
+	memset(lyr, 0, sizeof(*lyr));
 
 	rsvg->layers[index].id = id;
 	rsvg->layers[index].label = label;
@@ -107,17 +112,110 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 	pcre_free(re_id);
 }
 
+static inline int find_largest_substring_match(const struct neg_rsvg *rsvg,
+		const struct neg_layer *lyr)
+{
+	int i;
+	int best_len = -1;
+	int best_idx = -1;
+
+	printf(" s %s\n", lyr->name);
+
+	for(i=0; i<rsvg->layer_count; i++) {
+		struct neg_layer *sub = &rsvg->layers[i];
+
+		if (sub->flags & NEG_LAYER_STICKY)
+			continue;
+
+		if (lyr == sub)
+			continue;
+
+		if (sub->name_len >= lyr->name_len
+				|| strncmp(lyr->name, sub->name,
+					sub->name_len))
+			continue;
+
+		// found a sub layer that has a name that's a prefix
+		// of our layer
+
+		if (best_len < (signed)sub->name_len) {
+			best_len = sub->name_len;
+			best_idx = i;
+		}
+	}
+
+	return best_idx;
+}
+
+static void resolve_layer_order(struct neg_rsvg *rsvg, int index)
+{
+	struct neg_layer *lyr = &rsvg->layers[index];
+	int j;
+
+	if (lyr->flags & NEG_LAYER_RESOLVED)
+		return;
+
+	if (lyr->flags & NEG_LAYER_RESOLVING || lyr->local)
+		errx(1, "Recursion discovered in layer resolution "
+				"@%s label='%s' %04x %p %u",
+				lyr->id, lyr->label,
+				lyr->flags, lyr->local,
+				lyr->local ? lyr->local->count : 0);
+
+	printf("R %03u:%s\n", index, lyr->name);
+
+	lyr->local = neg_order_new(rsvg->layer_count);
+	lyr->order = neg_order_new(rsvg->layer_count);
+
+	// sticky tags will be included later
+	if (lyr->flags & NEG_LAYER_STICKY)
+		goto done;
+
+	lyr->flags |= NEG_LAYER_RESOLVING;
+
+	// find and process any substring matches
+	j = find_largest_substring_match(rsvg, lyr);
+	printf(" S %d\n", j);
+	if (j>=0) {
+		struct neg_layer *sub = &rsvg->layers[j];
+
+	printf("   %s\n", sub->name);
+
+		resolve_layer_order(rsvg, j);
+
+		if (lyr->name[sub->name_len] == '^') {
+			// this index will be above sub
+
+			neg_order_append(lyr->local, sub->local);
+			neg_order_add(lyr->local, index);
+		} else {
+			// this index will be below sub
+			neg_order_add(lyr->local, index);
+			neg_order_append(lyr->local, sub->local);
+		}
+	} else
+		// there is no substring match
+		neg_order_add(lyr->local, index);
+
+	// finished
+
+done:
+	neg_order_copy(lyr->order, rsvg->sticky_below);
+	neg_order_append(lyr->order, lyr->local);
+	neg_order_append(lyr->order, rsvg->sticky_above);
+
+	lyr->flags &= ~NEG_LAYER_RESOLVING;
+	lyr->flags |= NEG_LAYER_RESOLVED;
+}
+
 static void process_layer_info(struct neg_rsvg *rsvg)
 {
 	int i, j;
 	const char *p;
-	unsigned *always_above, always_above_count;
-	unsigned *always_below, always_below_count;
 
 	// allocate arrays for sticky indeces
-	always_above = calloc(rsvg->layer_count, sizeof(always_above[0]));
-	always_below = calloc(rsvg->layer_count, sizeof(always_below[0]));
-	always_above_count = always_below_count = 0;
+	rsvg->sticky_above = neg_order_new(rsvg->layer_count);
+	rsvg->sticky_below = neg_order_new(rsvg->layer_count);
 
 	for (i=0; i<rsvg->layer_count; i++) {
 		struct neg_layer *lyr = &rsvg->layers[i];
@@ -130,10 +228,10 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 				lyr->flags |= NEG_LAYER_HIDDEN;
 			} else if (*p == '^') {
 				lyr->flags |= NEG_LAYER_STICKY_ABOVE;
-				always_above[always_above_count++] = i;
+				neg_order_add(rsvg->sticky_above, i);
 			} else if (*p == '_') {
 				lyr->flags |= NEG_LAYER_STICKY_BELOW;
-				always_below[always_below_count++] = i;
+				neg_order_add(rsvg->sticky_below, i);
 			} else
 				break;
 			p++;
@@ -145,9 +243,30 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 	for (i=0; i<rsvg->layer_count; i++) {
 		struct neg_layer *lyr = &rsvg->layers[i];
 
+		printf("[%02u] %-9s %20s %04x %p %u\n",
+				i, lyr->id, lyr->label, lyr->flags,
+				lyr->order, lyr->order ? lyr->order->count : 0);
+	}
+
+
+	for (i=0; i<rsvg->layer_count; i++) {
+		struct neg_layer *lyr = &rsvg->layers[i];
+	printf("%03d-----------\n", i);
+		resolve_layer_order(rsvg, i);
+	printf("    ... [%u] ", lyr->order->count);
+		for (j=0; j<lyr->order->count; j++)
+			printf("%03u, ", lyr->order->array[j]);
+	printf("\n");
+	}
+
+
+	for (i=0; i<rsvg->layer_count; i++) {
+		struct neg_layer *lyr = &rsvg->layers[i];
+
 		if (lyr->flags & NEG_LAYER_HIDDEN)
 			continue;
 
+#if 0
 		lyr->order = calloc(rsvg->layer_count, sizeof(lyr->order[0]));
 		memcpy(lyr->order, always_below,
 				sizeof(lyr->order[0]) * always_below_count);
@@ -155,26 +274,15 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 
 		lyr->order[lyr->order_count++] = i;
 
-		for(j=0; j<rsvg->layer_count; j++) {
-			struct neg_layer *sub = &rsvg->layers[j];
-
-			if (i == j)
-				continue;
-
-			if (sub->name_len > lyr->name_len
-					|| strncmp(lyr->name, sub->name,
-						sub->name_len))
-				continue;
-
-			// found a sub layer that has a name that's a prefix
-			// of our layer
-
+		j = find_largest_substring_match(rsvg, lyr);
+		if (j>=0) {
 			lyr->order[lyr->order_count++] = j;
 		}
 
 		memcpy(&lyr->order[lyr->order_count], always_above,
 				sizeof(lyr->order[0]) * always_above_count);
 		lyr->order_count += always_above_count;
+#endif
 	}
 
 #if 0
@@ -196,9 +304,6 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 		printf("\n");
 	}
 #endif
-
-	free (always_below);
-	free (always_above);
 }
 
 #define DISPLAY_NONE "display:none"
@@ -263,7 +368,7 @@ struct neg_rsvg *neg_rsvg_open(const char *name)
 		errx(1, "Could not stat input file %s: %s",
 				name, strerror(errno));
 
-	inmm = mmap(NULL, stat.st_size, PROT_READ, MAP_SHARED, fd_in, 0); 
+	inmm = mmap(NULL, stat.st_size, PROT_READ, MAP_SHARED, fd_in, 0);
 	if (!inmm)
 		errx(1, "Could not mmap input file %s: %s",
 				name, strerror(errno));
@@ -299,10 +404,59 @@ void neg_rsvg_close(struct neg_rsvg *rsvg)
 	int i;
 
 	for (i=0; i<rsvg->layer_count; i++) {
-		free((void*)rsvg->layers[i].id);
-		free((void*)rsvg->layers[i].label);
-		free((void*)rsvg->layers[i].name);
+		struct neg_layer *lyr = &rsvg->layers[i];
+		free((void*)lyr->id);
+		free((void*)lyr->label);
+		free((void*)lyr->name);
+		neg_order_free(lyr->local);
+		neg_order_free(lyr->order);
 	}
+	neg_order_free(rsvg->sticky_above);
+	neg_order_free(rsvg->sticky_below);
 	free(rsvg->layers);
 	free(rsvg);
 }
+
+struct neg_order *neg_order_new(unsigned size)
+{
+	struct neg_order *order;
+
+	order = malloc(sizeof(*order)
+			+ sizeof(order->array[0]) * size);
+	if (!order)
+		errx(1, "Could not allocate buffer: %s",
+				strerror(errno));
+
+	order->size = size;
+	order->count = 0;
+
+	return order;
+}
+
+void neg_order_free(struct neg_order *order)
+{
+	free(order);
+}
+
+void neg_order_add(struct neg_order *order, unsigned n)
+{
+	// TODO: range check
+	order->array[ order->count ++ ] = n;
+}
+
+void neg_order_copy(struct neg_order *dest, const struct neg_order *src)
+{
+	// TODO: range check
+	dest->count = 0;
+	neg_order_append(dest, src);
+}
+
+void neg_order_append(struct neg_order *dest, const struct neg_order *src)
+{
+	// TODO: range check
+	memcpy(dest->array + dest->count,
+			src->array,
+			sizeof(dest->array[0]) * src->count);
+	dest->count += src->count;
+}
+

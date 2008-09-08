@@ -196,6 +196,9 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 		printf("\n");
 	}
 #endif
+
+	free (always_below);
+	free (always_above);
 }
 
 #define DISPLAY_NONE "display:none"

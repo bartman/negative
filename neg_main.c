@@ -34,8 +34,12 @@ int main(int argc, char *argv[])
 		conf.out.width = rsvg->size.width;
 	if (!conf.out.height)
 		conf.out.height = rsvg->size.height;
-	if (!conf.out.name)
-		conf.out.name = "slide-####";
+	if (!conf.out.name) {
+		if (conf.out.type == NEG_RNDR_SINGLE_PDF)
+			conf.out.name = "slides";
+		else
+			conf.out.name = "slide-####";
+	}
 	// }}}
 
 	rndr = neg_get_renderer(conf.out.type);
@@ -51,19 +55,15 @@ int main(int argc, char *argv[])
 
 	for (i = rsvg->layer_count-1; i>=0; i--) {
 		struct neg_layer *lyr = &rsvg->layers[i];
-		cairo_surface_t* csurf;
 		cairo_t *c;
 
 		if (lyr->flags & NEG_LAYER_HIDDEN)
 			continue;
 
-		csurf = rndr->slide_start(ctx);
+		c = rndr->slide_start(ctx);
 
 		printf("  * %s : ", lyr->name);
 
-		if (!csurf)
-			errx(1, "Could not create %s surface", rndr->name);
-		c = cairo_create(csurf);
 		if (!c)
 			errx(1, "Could not create cairo");
 
@@ -87,11 +87,8 @@ int main(int argc, char *argv[])
 
 		if (! rndr->slide_end(ctx))
 			errx(1, "error writing out %s slide", rndr->name);
-
-		cairo_destroy(c);
-		cairo_surface_destroy(csurf);
 	}
 	rndr->exit(ctx);
 	neg_rsvg_close(rsvg);
-	return 0;
+	exit(0);
 }

@@ -12,8 +12,13 @@
 
 static void dump_help(int rc, const char *argv0)
 {
-	printf("%s [-h] [-x <width>] [-y <height>] [-o pngs|pdfs] <input>\n",
-			argv0);
+	printf("%s [-h] [-x <width>] [-y <height>] [-t <type>] <input>\n"
+	       "\n"
+	       "<type> is one of:\n"
+	       "  pdf      - generate a single pdf\n"
+	       "  pdfs     - generate a pdf per slide\n"
+	       "  pngs     - generate a png per slide\n"
+	       , argv0);
 	exit(rc);
 }
 
@@ -48,7 +53,7 @@ int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 			if (conf->out.height < 512 || conf->out.height > 10000)
 				errx(1, "-y '%s' is invalid", argv[argi]);
 			break;
-		case 'o':
+		case 't':
 			argi++;
 			conf->out.type = neg_get_render_type(argv[argi]);
 			if ((unsigned)conf->out.type > NEG_RNDR_TYPE_MAX)

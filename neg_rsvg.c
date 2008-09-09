@@ -203,7 +203,7 @@ done:
 
 static void process_layer_info(struct neg_rsvg *rsvg)
 {
-	int i, j;
+	int i;
 	const char *p;
 
 	// allocate arrays for sticky indeces

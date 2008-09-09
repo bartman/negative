@@ -45,8 +45,13 @@ Included in the project is a `demo.svg` which shows some of the
 features.  In a clean clone you could run:
 
         make
-        negative demo.svg
-        xpdf demo.pdf
+        negative -t pdf demo.svg
+        xpdf slides.pdf
+
+or to generate png files:
+
+        negative -t pngs demo.svg
+        gqview *.png
 
 # Layer naming
 

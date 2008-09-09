@@ -20,7 +20,7 @@ struct neg_render {
 	const char *name;
 
 	neg_render_ctx (*init)(struct neg_conf *conf);
-	cairo_surface_t* (*slide_start)(neg_render_ctx);
+	cairo_t* (*slide_start)(neg_render_ctx);
 	bool (*slide_end)(neg_render_ctx);
 	bool (*exit)(neg_render_ctx);
 };

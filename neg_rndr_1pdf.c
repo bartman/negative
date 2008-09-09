@@ -1,32 +1,80 @@
+#include <err.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+#include <cairo-pdf.h>
 
 #include "neg_rndr.h"
 #include "neg_conf.h"
+#include "neg_file_util.h"
+
+struct neg_render_ctx {
+	struct neg_conf *conf;
+
+	// per slide info
+	char *fn;               // the filename
+	cairo_surface_t *csurf; // current cairo surface
+	cairo_t *cr;            // and the render context
+};
 
 static neg_render_ctx neg_rndr_1pdf_init(struct neg_conf *conf)
 {
-	return NULL;
+	struct neg_render_ctx *ctx;
+	int fn_len;
+
+	fn_len = strlen(conf->out.name) + 1 + 3 + 1;
+
+	ctx = calloc(1, sizeof(*ctx) + fn_len);
+
+	ctx->conf = conf;
+	ctx->fn   = (void*)(conf+1);
+
+	snprintf(ctx->fn, fn_len, "%s.pdf", conf->out.name);
+
+	printf("%s\n", ctx->fn);
+
+	ctx->csurf = cairo_pdf_surface_create(ctx->fn,
+			ctx->conf->out.width, ctx->conf->out.height);
+	if (!ctx->csurf)
+		errx(1, "Could not create surface for %s.", ctx->fn);
+
+	ctx->cr = cairo_create(ctx->csurf);
+
+	return ctx;
 }
 
-static cairo_surface_t* neg_rndr_1pdf_slide_start(neg_render_ctx opaque)
+static cairo_t* neg_rndr_1pdf_slide_start(neg_render_ctx opaque)
 {
-	return NULL;
+	struct neg_render_ctx *ctx = opaque;
+
+	return ctx->cr;
 }
 
 static bool neg_rndr_1pdf_slide_end(neg_render_ctx opaque)
 {
-	return false;
+	struct neg_render_ctx *ctx = opaque;
+
+	cairo_surface_flush(ctx->csurf);
+	cairo_show_page (ctx->cr);
+
+	return true;
 }
 
 static bool neg_rndr_1pdf_exit(neg_render_ctx opaque)
 {
-	return false;
+	struct neg_render_ctx *ctx = opaque;
+
+	cairo_destroy(ctx->cr);
+	cairo_surface_destroy(ctx->csurf);
+
+	free(ctx);
+	return true;
 }
 
 struct neg_render neg_rndr_1pdf =
 {
-	.name = "1pdf",
+	.name = "pdf",
 
 	.init        = neg_rndr_1pdf_init,
 	.slide_start = neg_rndr_1pdf_slide_start,

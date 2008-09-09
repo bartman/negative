@@ -21,8 +21,6 @@ struct neg_conf {
 static inline void neg_conf_init(struct neg_conf *conf)
 {
 	memset(conf, 0, sizeof *conf);
-
-	conf->out.type = NEG_RNDR_MANY_PNGS; // TODO: for now this is the default
 }
 
 

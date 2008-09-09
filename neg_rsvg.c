@@ -119,8 +119,6 @@ static inline int find_largest_substring_match(const struct neg_rsvg *rsvg,
 	int best_len = -1;
 	int best_idx = -1;
 
-	printf(" s %s\n", lyr->name);
-
 	for(i=0; i<rsvg->layer_count; i++) {
 		struct neg_layer *sub = &rsvg->layers[i];
 
@@ -162,8 +160,6 @@ static void resolve_layer_order(struct neg_rsvg *rsvg, int index)
 				lyr->flags, lyr->local,
 				lyr->local ? lyr->local->count : 0);
 
-	printf("R %03u:%s\n", index, lyr->name);
-
 	lyr->local = neg_order_new(rsvg->layer_count);
 	lyr->order = neg_order_new(rsvg->layer_count);
 
@@ -175,11 +171,8 @@ static void resolve_layer_order(struct neg_rsvg *rsvg, int index)
 
 	// find and process any substring matches
 	j = find_largest_substring_match(rsvg, lyr);
-	printf(" S %d\n", j);
 	if (j>=0) {
 		struct neg_layer *sub = &rsvg->layers[j];
-
-	printf("   %s\n", sub->name);
 
 		resolve_layer_order(rsvg, j);
 
@@ -240,50 +233,8 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 		lyr->name_len = strlen(lyr->name);
 	}
 
-	for (i=0; i<rsvg->layer_count; i++) {
-		struct neg_layer *lyr = &rsvg->layers[i];
-
-		printf("[%02u] %-9s %20s %04x %p %u\n",
-				i, lyr->id, lyr->label, lyr->flags,
-				lyr->order, lyr->order ? lyr->order->count : 0);
-	}
-
-
-	for (i=0; i<rsvg->layer_count; i++) {
-		struct neg_layer *lyr = &rsvg->layers[i];
-	printf("%03d-----------\n", i);
+	for (i=0; i<rsvg->layer_count; i++)
 		resolve_layer_order(rsvg, i);
-	printf("    ... [%u] ", lyr->order->count);
-		for (j=0; j<lyr->order->count; j++)
-			printf("%03u, ", lyr->order->array[j]);
-	printf("\n");
-	}
-
-
-	for (i=0; i<rsvg->layer_count; i++) {
-		struct neg_layer *lyr = &rsvg->layers[i];
-
-		if (lyr->flags & NEG_LAYER_HIDDEN)
-			continue;
-
-#if 0
-		lyr->order = calloc(rsvg->layer_count, sizeof(lyr->order[0]));
-		memcpy(lyr->order, always_below,
-				sizeof(lyr->order[0]) * always_below_count);
-		lyr->order_count = always_below_count;
-
-		lyr->order[lyr->order_count++] = i;
-
-		j = find_largest_substring_match(rsvg, lyr);
-		if (j>=0) {
-			lyr->order[lyr->order_count++] = j;
-		}
-
-		memcpy(&lyr->order[lyr->order_count], always_above,
-				sizeof(lyr->order[0]) * always_above_count);
-		lyr->order_count += always_above_count;
-#endif
-	}
 
 #if 0
 	for (i=rsvg->layer_count-1; i>=0; i--) {

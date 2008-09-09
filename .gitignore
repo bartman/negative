@@ -3,3 +3,6 @@
 .*.swp
 .*.dep
 negative
+cscope.files
+cscope.out
+tags

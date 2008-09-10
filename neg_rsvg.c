@@ -111,13 +111,14 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 					!= ovector[MATCH_LABEL_VAL_END])) {
 			// matched an inkscape:label
 
-			if (id)
+			if (label)
 				errx(1, "Matched two 'inkscape:label' fields "
 						"in a row.");
 
 			label = strndup(p + ovector[MATCH_LABEL_VAL_START],
 					ovector[MATCH_LABEL_VAL_END]
 					- ovector[MATCH_LABEL_VAL_START]);
+
 		} else {
 			char *tmp;
 
@@ -135,6 +136,8 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 #endif
 
 			add_layer(rsvg, id, label);
+
+			id = label = NULL;
 		}
 
 		p += ovector[1];

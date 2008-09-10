@@ -15,8 +15,28 @@
 
 #define OVECCOUNT 30
 
-#define MATCH_ID    "^[\t ]*id=\"(layer.*)\""
-#define MATCH_LABEL "^[\t ]*inkscape:label=\"(.*)\""
+#define MATCH_ID_OR_LABEL "^[\t ]*("                        \
+				"(id)=\"(layer[^\"]*)\""        \
+				"|"                         \
+				"(inkscape:label)=\"([^\"]*)\"" \
+				")"
+enum match_ovector_offsets {
+	MATCH_LINE_START,       // everything from <tab> on
+	MATCH_LINE_END,
+
+	MATCH_TEXT_START,       // just text in (...|...)
+	MATCH_TEXT_END,
+
+	MATCH_ID_STR_START,     // string "id" or NULL
+	MATCH_ID_STR_END,
+	MATCH_ID_VAL_START,     // value of id or NULL
+	MATCH_ID_VAL_END,
+
+	MATCH_LABEL_STR_START,  // string "inkscape:label" or NULL
+	MATCH_LABEL_STR_END,
+	MATCH_LABEL_VAL_START,  // value of inkscape:label or NULL
+	MATCH_LABEL_VAL_END,
+};
 
 static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 {
@@ -48,68 +68,79 @@ static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 {
 	char *p;
-	pcre *re_id, *re_label;
+	pcre *re;
 	const char *error;
 	int erroffset;
 	int rc;
 	int ovector[OVECCOUNT] = {0,};
+	char *id = NULL, *label = NULL;
 
-	re_id = pcre_compile(MATCH_ID, PCRE_MULTILINE,
+	re = pcre_compile(MATCH_ID_OR_LABEL, PCRE_MULTILINE,
 			&error, &erroffset, NULL);
-	if (!re_id)
-		errx(1, "Internal regular expression error at %u: %s.",
-				erroffset, error);
-
-	re_label = pcre_compile(MATCH_LABEL, PCRE_MULTILINE,
-			&error, &erroffset, NULL);
-	if (!re_id)
+	if (!re)
 		errx(1, "Internal regular expression error at %u: %s.",
 				erroffset, error);
 
 	for (p=in; p<end; ) {
 
-		char *id, *label;
+		// find something
 
-		// find id
-
-		rc = pcre_exec(re_id, NULL, p, end-p, 0, 0,
+		rc = pcre_exec(re, NULL, p, end-p, 0, 0,
 				ovector, OVECCOUNT);
 		if (rc == PCRE_ERROR_NOMATCH)
 			break;
 		if (rc <= 0)
 			errx(1, "Regular expression error %d.", rc);
 
-		id = strndup(p + ovector[2], ovector[3] - ovector[2]);
+		if ((ovector[MATCH_ID_STR_START]
+					!= ovector[MATCH_ID_STR_END])
+				&& (ovector[MATCH_ID_VAL_START]
+					!= ovector[MATCH_ID_VAL_END])) {
+			// matched an id
 
-		p += ovector[1];
+			if (id)
+				errx(1, "Matched two 'id' fields in a row.");
 
-		// find label
+			id = strndup(p + ovector[MATCH_ID_VAL_START],
+					ovector[MATCH_ID_VAL_END]
+					- ovector[MATCH_ID_VAL_START]);
 
-		rc = pcre_exec(re_label, NULL, p, end-p, 0, 0,
-				ovector, OVECCOUNT);
-		if (rc == PCRE_ERROR_NOMATCH)
-			break;
-		if (rc <= 0)
-			errx(1, "Regular expression error %d.", rc);
+		} else if ((ovector[MATCH_LABEL_STR_START]
+					!= ovector[MATCH_LABEL_STR_END])
+				&& (ovector[MATCH_LABEL_VAL_START]
+					!= ovector[MATCH_LABEL_VAL_END])) {
+			// matched an inkscape:label
 
-		label = strndup(p + ovector[2], ovector[3] - ovector[2]);
+			if (id)
+				errx(1, "Matched two 'inkscape:label' fields "
+						"in a row.");
 
-		// dump
+			label = strndup(p + ovector[MATCH_LABEL_VAL_START],
+					ovector[MATCH_LABEL_VAL_END]
+					- ovector[MATCH_LABEL_VAL_START]);
+		} else {
+			char *tmp;
 
+			tmp = strndup(p + ovector[MATCH_TEXT_START],
+					ovector[MATCH_TEXT_END]
+					- ovector[MATCH_TEXT_START]);
+
+			errx(1, "Cannot handle regexp find: %s.", tmp);
+		}
+
+		if (id && label) {
 #if 0
-		printf ("- %4u,%4u,%4u,%4u %9s...%s\n",
-				ovector[0], ovector[1],
-				ovector[2], ovector[3],
-				id, label);
+			printf ("- %9s...%s\n",
+					id, label);
 #endif
 
-		add_layer(rsvg, id, label);
+			add_layer(rsvg, id, label);
+		}
 
 		p += ovector[1];
 	}
 
-	pcre_free(re_label);
-	pcre_free(re_id);
+	pcre_free(re);
 }
 
 static inline int find_largest_substring_match(const struct neg_rsvg *rsvg,

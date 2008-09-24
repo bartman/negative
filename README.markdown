@@ -12,6 +12,10 @@ files, or a single pdf that contains all the slides.
 
 The project is tracked in git, you can obtain it by cloning it:
 
+        git clone git://github.com/bartman/negative.git
+
+or
+
         git clone git://tachyon.jukie.net/negative.git/
 
 ## Dependencies

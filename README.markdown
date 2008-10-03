@@ -8,6 +8,16 @@ containing specially named layers (see "Layer naming" below).  The
 output can be either a collection of png files, a collection of pdf
 files, or a single pdf that contains all the slides.
 
+## License
+
+The code is licensed as GPL v2 or, at your option, any later version.
+Please see [http://www.gnu.org/licenses/gpl-2.0.txt].
+
+## History
+
+The initial prototype and idea for negative came from a blog post by
+Rusty Russell: [http://ozlabs.org/~rusty/index.cgi/2006]
+
 ## Source code
 
 The project is tracked in git, you can obtain it by cloning it:

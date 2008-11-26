@@ -26,7 +26,7 @@ The project is tracked in git, you can obtain it by cloning it:
 
 or
 
-        git clone git://tachyon.jukie.net/negative.git/
+        git clone git://git.jukie.net/negative.git/
 
 ## Dependencies
 

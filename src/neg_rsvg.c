@@ -16,7 +16,8 @@
 #define OVECCOUNT 30
 
 #define MATCH_ID_OR_LABEL "^[\t ]*("                        \
-				"(id)=\"(layer[^\"]*)\""        \
+				"inkscape:groupmode=\"layer\"\\s*" \
+				"(id)=\"([^\"]*)\""        \
 				"|"                         \
 				"(inkscape:label)=\"([^\"]*)\"" \
 				")"
@@ -99,7 +100,8 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 			// matched an id
 
 			if (id)
-				errx(1, "Matched two 'id' fields in a row.");
+				errx(1, "Matched two 'id' fields in a row: %s.",
+						id);
 
 			id = strndup(p + ovector[MATCH_ID_VAL_START],
 					ovector[MATCH_ID_VAL_END]
@@ -113,7 +115,7 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 
 			if (label)
 				errx(1, "Matched two 'inkscape:label' fields "
-						"in a row.");
+						"in a row: %s", label);
 
 			label = strndup(p + ovector[MATCH_LABEL_VAL_START],
 					ovector[MATCH_LABEL_VAL_END]
@@ -126,7 +128,7 @@ static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 					ovector[MATCH_TEXT_END]
 					- ovector[MATCH_TEXT_START]);
 
-			errx(1, "Cannot handle regexp find: %s.", tmp);
+			errx(1, "Cannot handle regexp match: %s.", tmp);
 		}
 
 		if (id && label) {

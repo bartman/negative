@@ -229,9 +229,13 @@ static void resolve_layer_order(struct neg_rsvg *rsvg, int index)
 	// finished
 
 done:
-	neg_order_copy(lyr->order, rsvg->sticky_below);
+	if (! (lyr->flags & NEG_LAYER_LONELY))
+		neg_order_copy(lyr->order, rsvg->sticky_below);
+
 	neg_order_append(lyr->order, lyr->local);
-	neg_order_append(lyr->order, rsvg->sticky_above);
+
+	if (! (lyr->flags & NEG_LAYER_LONELY))
+		neg_order_append(lyr->order, rsvg->sticky_above);
 
 	lyr->flags &= ~NEG_LAYER_RESOLVING;
 	lyr->flags |= NEG_LAYER_RESOLVED;
@@ -253,7 +257,9 @@ static void process_layer_info(struct neg_rsvg *rsvg)
 
 		p = lyr->label;
 		while(*p) {
-			if (*p == '#') {
+			if (*p == '%') {
+				lyr->flags |= NEG_LAYER_LONELY;
+			} if (*p == '#') {
 				lyr->flags |= NEG_LAYER_HIDDEN;
 			} else if (*p == '^') {
 				lyr->flags |= NEG_LAYER_STICKY_ABOVE;

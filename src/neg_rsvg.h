@@ -5,9 +5,10 @@
 
 enum neg_layer_flags {
 	// extracted from svg
-	NEG_LAYER_HIDDEN       = 0x0001,
-	NEG_LAYER_STICKY_ABOVE = 0x0002,
-	NEG_LAYER_STICKY_BELOW = 0x0004,
+	NEG_LAYER_LONELY       = 0x0001,
+	NEG_LAYER_HIDDEN       = 0x0002,
+	NEG_LAYER_STICKY_ABOVE = 0x0004,
+	NEG_LAYER_STICKY_BELOW = 0x0008,
 	// state tracking
 	NEG_LAYER_RESOLVING    = 0x4000,
 	NEG_LAYER_RESOLVED     = 0x8000,

@@ -88,13 +88,15 @@ Special meaning for non alpha-numeric characters at start of layer name:
  - `#` this layer does not generate a slide (it's hidden)
  - `_` this layer will be rendered below any layer that generates a slide
  - `^` this layer will be rendered above any layer that generates a slide
+ - `%` this layer will ignore sticky flags `_` and `^`
 
 The `#` character can be combined with either `_` or `^` to give the
 presentation a common theme across all slides.  For example, adding
 `#_border` could be used to place a rectangular border around the slide
-which would be placed under all other slides.  Similarly a `#^sun` layer
+which would be placed under all other slides.  Similarly, a `#^sun` layer
 could draw a translucent sun that is rendered over the right corner of
-some slides.
+other slides.  However, the `%title` layer would not include elements
+of the *border* or *sun* slides and would be rendered on its own.
 
 Special meaning for non alpha-numeric characters found in the middle of
 the layer name:

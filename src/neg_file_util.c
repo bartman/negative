@@ -38,8 +38,8 @@ void neg_filename_init(struct neg_filename *fn, const char *base,
 		+1;            // 0-termination
 	fn->buffer = calloc(1, asize);
 	if (!fn->buffer)
-		errx(1, "Memory allocation failure of a %u byte string.",
-				asize);
+		errx(1, "Memory allocation failure of a %lu byte string.",
+				(long)asize);
 
 	memcpy(fn->buffer, base, fn->base_len);
 	fn->buffer[fn->base_len] = '.';

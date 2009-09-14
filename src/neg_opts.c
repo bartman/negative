@@ -12,7 +12,7 @@
 
 static void dump_help(int rc, const char *argv0)
 {
-	printf("%s [-h] [-x <width>] [-y <height>] [-t <type>] <input>\n"
+	printf("%s [-h] [-x <width>] [-y <height>] [-t <type>] [-o <output>] <input>\n"
 	       "\n"
 	       "<type> is one of:\n"
 	       "  pdf      - generate a single pdf\n"
@@ -58,6 +58,10 @@ int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 			conf->out.type = neg_get_render_type(argv[argi]);
 			if ((unsigned)conf->out.type > NEG_RNDR_TYPE_MAX)
 				errx(1, "-o '%s' is invalid", argv[argi]);
+			break;
+		case 'o':
+			argi++;
+			conf->out.name = argv[argi];
 			break;
 		default:
 			errx(1, "Unhandled option %s", argv[argi-1]);

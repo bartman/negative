@@ -21,18 +21,23 @@ struct neg_render_ctx {
 static neg_render_ctx neg_rndr_1pdf_init(struct neg_conf *conf)
 {
 	struct neg_render_ctx *ctx;
-	int fn_len;
+	const char *base = "slides.pdf";
+	int base_len, fn_len;
 
-	fn_len = strlen(conf->out.name) + 1 + 3 + 1;
+	if (conf->out.name)
+		base = conf->out.name;
+
+	base_len = strlen(base);
+	fn_len = base_len + 1;
 
 	ctx = calloc(1, sizeof(*ctx) + fn_len);
 
 	ctx->conf = conf;
 	ctx->fn   = (void*)(conf+1);
 
-	snprintf(ctx->fn, fn_len, "%s.pdf", conf->out.name);
+	strcpy(ctx->fn, base);
 
-	printf("%s\n", ctx->fn);
+	printf("# %s\n", ctx->fn);
 
 	ctx->csurf = cairo_pdf_surface_create(ctx->fn,
 			ctx->conf->out.width, ctx->conf->out.height);

@@ -7,8 +7,7 @@
 
 #include "neg_file_util.h"
 
-void neg_filename_init(struct neg_filename *fn, const char *base,
-		const char *ext)
+void neg_filename_init(struct neg_filename *fn, const char *base)
 {
 	const char *p;
 	size_t asize;
@@ -17,9 +16,6 @@ void neg_filename_init(struct neg_filename *fn, const char *base,
 
 	fn->base = base;
 	fn->base_len = strlen(base);
-
-	fn->ext = ext;
-	fn->ext_len = strlen(ext);
 
 	// find the ### pattern
 	p = index(base, '#');
@@ -32,19 +28,14 @@ void neg_filename_init(struct neg_filename *fn, const char *base,
 
 	fn->index_len = p - base - fn->index_ofs;
 
-	asize = fn->base_len
-		+ 1            // period
-		+ fn->ext_len  // extension
-		+1;            // 0-termination
+	asize = fn->base_len + 1; // 0-termination
 	fn->buffer = calloc(1, asize);
 	if (!fn->buffer)
 		errx(1, "Memory allocation failure of a %lu byte string.",
 				(long)asize);
 
 	memcpy(fn->buffer, base, fn->base_len);
-	fn->buffer[fn->base_len] = '.';
-	memcpy(fn->buffer + fn->base_len + 1, ext, fn->ext_len);
-	fn->buffer[fn->base_len + 1 + fn->ext_len] = 0;
+	fn->buffer[fn->base_len] = 0;
 
 	fn->index_max = (unsigned)pow(10,fn->index_len) - 1;
 	fn->index = 0;

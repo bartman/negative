@@ -21,11 +21,15 @@ struct neg_render_ctx {
 static neg_render_ctx neg_rndr_pdfs_init(struct neg_conf *conf)
 {
 	struct neg_render_ctx *ctx;
+	const char *base = "slide-####.pdf";
+
+	if (conf->out.name)
+		base = conf->out.name;
 
 	ctx = calloc(1, sizeof(*ctx));
 
 	ctx->conf = conf;
-	neg_filename_init(&ctx->fn, conf->out.name, "pdf");
+	neg_filename_init(&ctx->fn, base);
 
 	return ctx;
 }

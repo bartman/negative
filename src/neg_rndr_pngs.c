@@ -19,11 +19,15 @@ struct neg_render_ctx {
 static neg_render_ctx neg_rndr_pngs_init(struct neg_conf *conf)
 {
 	struct neg_render_ctx *ctx;
+	const char *base = "slide-####.png";
+
+	if (conf->out.name)
+		base = conf->out.name;
 
 	ctx = calloc(1, sizeof(*ctx));
 
 	ctx->conf = conf;
-	neg_filename_init(&ctx->fn, conf->out.name, "png");
+	neg_filename_init(&ctx->fn, conf->out.name);
 
 	return ctx;
 }

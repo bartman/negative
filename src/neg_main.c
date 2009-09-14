@@ -34,12 +34,6 @@ int main(int argc, char *argv[])
 		conf.out.width = rsvg->size.width;
 	if (!conf.out.height)
 		conf.out.height = rsvg->size.height;
-	if (!conf.out.name) {
-		if (conf.out.type == NEG_RNDR_SINGLE_PDF)
-			conf.out.name = "slides";
-		else
-			conf.out.name = "slide-####";
-	}
 	// }}}
 
 	rndr = neg_get_renderer(conf.out.type);
@@ -47,9 +41,10 @@ int main(int argc, char *argv[])
 		errx(1, "Could not handler output type #%u", conf.out.type);
 
 	printf("format %s\n", rndr->name);
-	printf("input  %u x %u\n", rsvg->size.width, rsvg->size.height);
-	printf("output %u x %u\n", (unsigned)conf.out.width,
-			(unsigned)conf.out.height);
+	printf("input  %u x %u (%s)\n", rsvg->size.width, rsvg->size.height,
+			conf.in.name);
+	printf("output %u x %u (%s)\n", (unsigned)conf.out.width,
+			(unsigned)conf.out.height, conf.out.name);
 
 	ctx = rndr->init(&conf);
 

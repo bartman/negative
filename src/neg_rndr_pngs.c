@@ -27,7 +27,7 @@ static neg_render_ctx neg_rndr_pngs_init(struct neg_conf *conf)
 	ctx = calloc(1, sizeof(*ctx));
 
 	ctx->conf = conf;
-	neg_filename_init(&ctx->fn, conf->out.name);
+	neg_filename_init(&ctx->fn, base);
 
 	return ctx;
 }

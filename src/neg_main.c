@@ -12,41 +12,33 @@
 #include "neg_rndr.h"
 #include "neg_rsvg.h"
 
-int main(int argc, char *argv[])
+struct neg_loop_vars {
+	struct neg_conf       *conf;
+	struct neg_render     *rndr;
+	struct neg_render_ctx *ctx;
+};
+
+static void process_rsvg(struct neg_loop_vars *loop, const char *fname)
 {
-	int i, j, rc;
+	int i, j;
 	struct neg_rsvg *rsvg;
-	struct neg_conf conf;
-	struct neg_render *rndr;
-	static neg_render_ctx *ctx;
 
-	neg_program = argv[0];
-
-	neg_conf_init(&conf);
-	rc = neg_parse_cmdline(&conf, argc, argv);
-	if (rc != argc)
-		errx(1, "Garbage at end of cmdline, see %s -h.", neg_program);
-
-	rsvg = neg_rsvg_open(conf.in.name);
+	rsvg = neg_rsvg_open(fname);
 
 	// {{{ TODO shoudl go into neg_set_defaults() or some such
-	if (!conf.out.width)
-		conf.out.width = rsvg->size.width;
-	if (!conf.out.height)
-		conf.out.height = rsvg->size.height;
+	if (!loop->conf->out.width)
+		loop->conf->out.width = rsvg->size.width;
+	if (!loop->conf->out.height)
+		loop->conf->out.height = rsvg->size.height;
 	// }}}
 
-	rndr = neg_get_renderer(conf.out.type);
-	if (!rndr)
-		errx(1, "Could not handler output type #%u", conf.out.type);
-
-	printf("format %s\n", rndr->name);
 	printf("input  %u x %u (%s)\n", rsvg->size.width, rsvg->size.height,
-			conf.in.name);
-	printf("output %u x %u (%s)\n", (unsigned)conf.out.width,
-			(unsigned)conf.out.height, conf.out.name);
+			fname);
+	printf("output %u x %u (%s)\n", (unsigned)loop->conf->out.width,
+			(unsigned)loop->conf->out.height, loop->conf->out.name);
 
-	ctx = rndr->init(&conf);
+	if (! loop->ctx)
+		loop->ctx = loop->rndr->init(loop->conf);
 
 	for (i = rsvg->layer_count-1; i>=0; i--) {
 		struct neg_layer *lyr = &rsvg->layers[i];
@@ -55,15 +47,15 @@ int main(int argc, char *argv[])
 		if (lyr->flags & NEG_LAYER_HIDDEN)
 			continue;
 
-		c = rndr->slide_start(ctx);
+		c = loop->rndr->slide_start(loop->ctx);
 
 		printf("  * %s : ", lyr->name);
 
 		if (!c)
 			errx(1, "Could not create cairo");
 
-		cairo_scale(c, conf.out.width/rsvg->size.width,
-				conf.out.height/rsvg->size.height);
+		cairo_scale(c, loop->conf->out.width/rsvg->size.width,
+				loop->conf->out.height/rsvg->size.height);
 
 		for(j=0; j<lyr->order->count; j++) {
 			unsigned order = lyr->order->array[j];
@@ -80,10 +72,38 @@ int main(int argc, char *argv[])
 
 		printf("\n");
 
-		if (! rndr->slide_end(ctx))
-			errx(1, "error writing out %s slide", rndr->name);
+		if (! loop->rndr->slide_end(loop->ctx))
+			errx(1, "error writing out %s slide", loop->rndr->name);
 	}
-	rndr->exit(ctx);
 	neg_rsvg_close(rsvg);
+}
+
+int main(int argc, char *argv[])
+{
+	int i, rc;
+	struct neg_conf conf;
+	struct neg_loop_vars loop;
+
+	memset(&loop, 0, sizeof(loop));
+	loop.conf = &conf;
+
+	neg_program = argv[0];
+
+	neg_conf_init(&conf);
+	rc = neg_parse_cmdline(&conf, argc, argv);
+	if (rc != argc)
+		errx(1, "Garbage at end of cmdline, see %s -h.", neg_program);
+
+	loop.rndr = neg_get_renderer(conf.out.type);
+	if (!loop.rndr)
+		errx(1, "Could not handler output type #%u", conf.out.type);
+
+	printf("format %s\n", loop.rndr->name);
+
+	for (i=0; i<conf.in.file_count; i++)
+		process_rsvg(&loop, conf.in.names[i]);
+
+	if (loop.rndr && loop.ctx)
+		loop.rndr->exit(loop.ctx);
 	exit(0);
 }

@@ -9,7 +9,8 @@
 
 struct neg_conf {
 	struct {
-		const char *name;
+		unsigned file_count;
+		const char **names;
 	} in;
 	struct {
 		const char *name;

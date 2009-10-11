@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <err.h>
+#include <errno.h>
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "neg_opts.h"
 
@@ -12,7 +15,7 @@
 
 static void dump_help(int rc, const char *argv0)
 {
-	printf("%s [-h] [-x <width>] [-y <height>] [-t <type>] [-o <output>] <input>\n"
+	printf("%s [-h] [-x <width>] [-y <height>] [-t <type>] [-o <output>] <input>...\n"
 	       "\n"
 	       "<type> is one of:\n"
 	       "  pdf      - generate a single pdf\n"
@@ -24,7 +27,7 @@ static void dump_help(int rc, const char *argv0)
 
 int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 {
-	int argi;
+	int argi, max_names, i;
 
 	if (argc < 2)
 		errx(1, "Insufficient arguments, see %s -h.", argv[0]);
@@ -69,8 +72,25 @@ int neg_parse_cmdline(struct neg_conf *conf, int argc, char *argv[])
 		}
 	}
 
-	conf->in.name = argv[argi];
-	argi++;
+	max_names = argc - argi + 2;
+	conf->in.names = calloc(max_names, sizeof(char*));
+	if (!conf->in.names)
+		errx(1, "Could not allocate buffer: %s",
+				strerror(errno));
+
+	for (i=0; argv[argi]; argi++, i++) {
+		const char *name = argv[argi];
+		struct stat st;
+		int rc;
+
+		rc = stat(name, &st);
+		if (rc < 0)
+			errx(1, "%s: %s", name,
+					strerror(errno));
+
+		conf->in.names[i] = name;
+		conf->in.file_count ++;
+	}
 
 	return argi;
 }

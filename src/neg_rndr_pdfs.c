@@ -40,7 +40,7 @@ static cairo_t* neg_rndr_pdfs_slide_start(neg_render_ctx opaque)
 
 	const char *fn;
 	fn = neg_filename_next(&ctx->fn);
-	printf("%s\n", fn);
+	//printf("%s\n", fn);
 
 	ctx->csurf = cairo_pdf_surface_create(fn,
 			ctx->conf->out.width, ctx->conf->out.height);

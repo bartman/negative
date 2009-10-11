@@ -33,7 +33,7 @@ static neg_render_ctx neg_rndr_1pdf_init(struct neg_conf *conf)
 	ctx = calloc(1, sizeof(*ctx) + fn_len);
 
 	ctx->conf = conf;
-	ctx->fn   = (void*)(conf+1);
+	ctx->fn   = (void*)(ctx+1);
 
 	strcpy(ctx->fn, base);
 

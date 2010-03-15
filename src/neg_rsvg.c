@@ -10,34 +10,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <pcre.h>
+#include <libxml/parser.h>
 
 #include "neg_rsvg.h"
 
 #define OVECCOUNT 30
-
-#define MATCH_ID_OR_LABEL "^[\t ]*("                        \
-				"inkscape:groupmode=\"layer\"\\s*" \
-				"(id)=\"([^\"]*)\""        \
-				"|"                         \
-				"(inkscape:label)=\"([^\"]*)\"" \
-				")"
-enum match_ovector_offsets {
-	MATCH_LINE_START,       // everything from <tab> on
-	MATCH_LINE_END,
-
-	MATCH_TEXT_START,       // just text in (...|...)
-	MATCH_TEXT_END,
-
-	MATCH_ID_STR_START,     // string "id" or NULL
-	MATCH_ID_STR_END,
-	MATCH_ID_VAL_START,     // value of id or NULL
-	MATCH_ID_VAL_END,
-
-	MATCH_LABEL_STR_START,  // string "inkscape:label" or NULL
-	MATCH_LABEL_STR_END,
-	MATCH_LABEL_VAL_START,  // value of inkscape:label or NULL
-	MATCH_LABEL_VAL_END,
-};
 
 static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 {
@@ -66,87 +43,93 @@ static void add_layer(struct neg_rsvg *rsvg, const char *id, const char *label)
 	rsvg->layers[index].label = label;
 }
 
+/// Build Layer Info Definitions /////////////////////////////////////
+
+typedef struct {
+  int success;
+  xmlChar *expected_element;
+  xmlChar *groupmode_attr_name;
+  xmlChar *groupmode_attr_value;
+  xmlChar *id_attr_name;
+  xmlChar *label_attr_name;
+  struct neg_rsvg *rsvg;
+} SAXParserStatus;
+
+static void sax_bli_start_doc(void *user_data) {
+  SAXParserStatus* sax_status = (SAXParserStatus*)user_data;
+  sax_status->success = 1;
+  sax_status->expected_element = xmlCharStrdup("g");
+  sax_status->groupmode_attr_name = xmlCharStrdup("inkscape:groupmode");
+  sax_status->groupmode_attr_value = xmlCharStrdup("layer");
+  sax_status->id_attr_name = xmlCharStrdup("id");
+  sax_status->label_attr_name = xmlCharStrdup("inkscape:label");
+}
+
+static void sax_bli_end_doc(void *user_data) {
+  SAXParserStatus* sax_status = (SAXParserStatus*)user_data;
+  xmlFree(sax_status->expected_element);
+  xmlFree(sax_status->groupmode_attr_name);
+  xmlFree(sax_status->id_attr_name);
+  xmlFree(sax_status->label_attr_name);
+}
+
+static void sax_bli_start_element(void *user_data,
+                                  const xmlChar* name,
+                                  const xmlChar** attrs) {
+  SAXParserStatus* sax_status = (SAXParserStatus*)user_data;
+  const xmlChar **iAttr = attrs;
+  const xmlChar *attrName = 0, *attrValue = 0;
+  const xmlChar *id = 0, *label = 0;
+  int bIsLayer = 0;
+
+  if (!sax_status->success
+      || !xmlStrEqual(name, sax_status->expected_element)
+      || attrs == NULL) return;
+
+  for (; *iAttr != NULL; ++iAttr) {
+    if (attrName == NULL)
+      attrName = *iAttr;
+    else {
+      attrValue = *iAttr;
+
+      if (xmlStrEqual(attrName, sax_status->groupmode_attr_name)
+          && xmlStrEqual(attrValue, sax_status->groupmode_attr_value)) {
+        bIsLayer = 1;
+      }
+      else if (xmlStrEqual(attrName, sax_status->id_attr_name)) {
+        id = attrValue;
+      }
+      else if (xmlStrEqual(attrName, sax_status->label_attr_name)) {
+        label = attrValue;
+      }
+
+      attrName = NULL;
+    }
+  }
+
+  if (bIsLayer && id && label) {
+#if 0
+    printf ("- %9s...%s\n", id, label);
+#endif
+    add_layer(sax_status->rsvg, xmlStrdup(id), xmlStrdup(label));
+  }
+}
+
 static void build_layer_info(struct neg_rsvg *rsvg, char *in, char *end)
 {
-	char *p;
-	pcre *re;
-	const char *error;
-	int erroffset;
-	int rc;
-	int ovector[OVECCOUNT] = {0,};
-	char *id = NULL, *label = NULL;
+  SAXParserStatus parser_status;
+  xmlSAXHandler parser_handlers;
 
-	re = pcre_compile(MATCH_ID_OR_LABEL, PCRE_MULTILINE,
-			&error, &erroffset, NULL);
-	if (!re)
-		errx(1, "Internal regular expression error at %u: %s.",
-				erroffset, error);
+  parser_status.rsvg = rsvg;
+  memset(&parser_handlers, 0, sizeof(xmlSAXHandler));
+  parser_handlers.startDocument = sax_bli_start_doc;
+  parser_handlers.endDocument = sax_bli_end_doc;
+  parser_handlers.startElement = sax_bli_start_element;
 
-	for (p=in; p<end; ) {
-
-		// find something
-
-		rc = pcre_exec(re, NULL, p, end-p, 0, 0,
-				ovector, OVECCOUNT);
-		if (rc == PCRE_ERROR_NOMATCH)
-			break;
-		if (rc <= 0)
-			errx(1, "Regular expression error %d.", rc);
-
-		if ((ovector[MATCH_ID_STR_START]
-					!= ovector[MATCH_ID_STR_END])
-				&& (ovector[MATCH_ID_VAL_START]
-					!= ovector[MATCH_ID_VAL_END])) {
-			// matched an id
-
-			if (id)
-				errx(1, "Matched two 'id' fields in a row: %s.",
-						id);
-
-			id = strndup(p + ovector[MATCH_ID_VAL_START],
-					ovector[MATCH_ID_VAL_END]
-					- ovector[MATCH_ID_VAL_START]);
-
-		} else if ((ovector[MATCH_LABEL_STR_START]
-					!= ovector[MATCH_LABEL_STR_END])
-				&& (ovector[MATCH_LABEL_VAL_START]
-					!= ovector[MATCH_LABEL_VAL_END])) {
-			// matched an inkscape:label
-
-			if (label)
-				errx(1, "Matched two 'inkscape:label' fields "
-						"in a row: %s", label);
-
-			label = strndup(p + ovector[MATCH_LABEL_VAL_START],
-					ovector[MATCH_LABEL_VAL_END]
-					- ovector[MATCH_LABEL_VAL_START]);
-
-		} else {
-			char *tmp;
-
-			tmp = strndup(p + ovector[MATCH_TEXT_START],
-					ovector[MATCH_TEXT_END]
-					- ovector[MATCH_TEXT_START]);
-
-			errx(1, "Cannot handle regexp match: %s.", tmp);
-		}
-
-		if (id && label) {
-#if 0
-			printf ("- %9s...%s\n",
-					id, label);
-#endif
-
-			add_layer(rsvg, id, label);
-
-			id = label = NULL;
-		}
-
-		p += ovector[1];
-	}
-
-	pcre_free(re);
+  xmlSAXUserParseMemory(&parser_handlers, &parser_status, in, end - in);
 }
+
+//////////////////////////////////////////////////////////////////////
 
 static inline int find_largest_substring_match(const struct neg_rsvg *rsvg,
 		const struct neg_layer *lyr)

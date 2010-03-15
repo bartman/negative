@@ -5,6 +5,7 @@
 #include <rsvg.h>
 #include <rsvg-cairo.h>
 #include <stdlib.h>
+#include <libxml/parser.h>
 
 #include "neg_conf.h"
 #include "neg_opts.h"
@@ -100,10 +101,16 @@ int main(int argc, char *argv[])
 
 	printf("format %s\n", loop.rndr->name);
 
+        // Start up and cleanup the libxml2 parser here
+        xmlInitParser();
 	for (i=0; i<conf.in.file_count; i++)
 		process_rsvg(&loop, conf.in.names[i]);
+        xmlCleanupParser();
 
 	if (loop.rndr && loop.ctx)
 		loop.rndr->exit(loop.ctx);
+
+        // Detect libxml2 memory leaks here
+        xmlMemoryDump();
 	exit(0);
 }

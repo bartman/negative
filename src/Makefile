@@ -18,10 +18,11 @@ CCFLAGS = -I/usr/include/cairo \
 	  -I/usr/include/gtk-2.0 \
 	  -I/usr/include/glib-2.0 \
 	  -I/usr/lib/glib-2.0/include/ \
-	  -I/usr/include/librsvg-2/librsvg/
-CFLAGS  = -Wall -O2 -ggdb
+	  -I/usr/include/librsvg-2/librsvg/\
+	  `pkg-config --cflags libxml-2.0`
+CFLAGS  = -Wall -ggdb
 
-LIBS    = -lrsvg-2 -lcairo -lpcre
+LIBS    = -lrsvg-2 -lcairo -lpcre `pkg-config --libs libxml-2.0`
 
 .PHONY: all
 all: ${TARGET}

@@ -1,3 +1,3 @@
-- the build_layer_info() *really* needs to be rewritten to use an xml parser
+- DONE: the build_layer_info() *really* needs to be rewritten to use an xml parser
   not just regexp searching.  the code can be fooled if the .svg containes
   imported graphics that contained layers.

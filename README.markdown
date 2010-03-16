@@ -30,11 +30,11 @@ or
 
 ## Dependencies
 
-To build you will need at least librsvg, libcairo, and libpcre.
+To build you will need at least librsvg, libcairo, libpcre and libxml2.
 
 Try something like this on your Debian-based system:
 
-        apt-get install librsvg2-dev libcairo2-dev libpcre3-dev
+        apt-get install librsvg2-dev libcairo2-dev libpcre3-dev libxml2-dev
 
 
 ## Building

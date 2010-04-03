@@ -2,8 +2,8 @@
 #include <string.h>
 #include <strings.h>
 #include <cairo.h>
-#include <rsvg.h>
-#include <rsvg-cairo.h>
+#include <librsvg/rsvg.h>
+#include <librsvg/rsvg-cairo.h>
 #include <stdlib.h>
 #include <libxml/parser.h>
 

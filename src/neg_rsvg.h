@@ -1,7 +1,7 @@
 #ifndef __NEG_RSVG_H__
 #define __NEG_RSVG_H__
 
-#include <rsvg.h>
+#include <librsvg/rsvg.h>
 
 enum neg_layer_flags {
 	// extracted from svg

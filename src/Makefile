@@ -14,18 +14,14 @@ OBJS    = ${SRCS:%.c=%.o}
 DEPS    = ${SRCS:%.c=.%.c.dep}
 EDEPS   = $(wildcard ${DEPS})
 
-CCFLAGS = -I/usr/include/cairo \
-	  -I/usr/include/gtk-2.0 \
-	  -I/usr/include/glib-2.0 \
-	  -I/usr/lib/glib-2.0/include/ \
-	  -I/usr/include/librsvg-2/librsvg/\
-	  `pkg-config --cflags libxml-2.0`
+LIB_NAMES = glib-2.0 librsvg-2.0 cairo-svg libpcre libxml-2.0
+
+CCFLAGS = $(foreach n,${LIB_NAMES}, $(shell pkg-config --cflags ${n}))
+LIBS    = $(foreach n,${LIB_NAMES}, $(shell pkg-config --libs ${n}))
 CFLAGS  = -Wall -ggdb
 
-LIBS    = -lrsvg-2 -lcairo -lpcre `pkg-config --libs libxml-2.0`
-
 .PHONY: all
-all: ${TARGET}
+all: lib_check ${TARGET}
 
 ifneq (,${EDEPS})
 include ${EDEPS}

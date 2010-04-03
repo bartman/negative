@@ -16,8 +16,9 @@ EDEPS   = $(wildcard ${DEPS})
 
 LIB_NAMES = glib-2.0 librsvg-2.0 cairo-svg libpcre libxml-2.0
 
-CCFLAGS = $(foreach n,${LIB_NAMES}, $(shell pkg-config --cflags ${n}))
-LIBS    = $(foreach n,${LIB_NAMES}, $(shell pkg-config --libs ${n}))
+MISSING = $(strip $(foreach n,${LIB_NAMES},$(if $(shell pkg-config --modversion --silence-errors ${n}),,${n})))
+CCFLAGS = $(foreach n,${LIB_NAMES},$(shell pkg-config --cflags ${n}))
+LIBS    = $(foreach n,${LIB_NAMES},$(shell pkg-config --libs ${n}))
 CFLAGS  = -Wall -ggdb
 
 .PHONY: all
@@ -26,6 +27,11 @@ all: lib_check ${TARGET}
 ifneq (,${EDEPS})
 include ${EDEPS}
 endif
+
+.PHONY: lib_check
+lib_check:
+	@$(if ${MISSING},$(error "FAILED DEPENDENCY CHECK! Make sure you have: ${MISSING}"))
+	@echo "Dependency check successful."
 
 ${TARGET}: ${OBJS}
 	${CC} -o $@ ${OBJS} ${LIBS}

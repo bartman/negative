@@ -21,6 +21,8 @@ CCFLAGS = $(foreach n,${LIB_NAMES},$(shell pkg-config --cflags ${n}))
 LIBS    = $(foreach n,${LIB_NAMES},$(shell pkg-config --libs ${n}))
 CFLAGS  = -Wall -ggdb
 
+Q=$(if ${V},,@)
+
 .PHONY: all
 all: lib_check ${TARGET}
 
@@ -34,13 +36,16 @@ lib_check:
 	@echo "Dependency check successful."
 
 ${TARGET}: ${OBJS}
-	${CC} -o $@ ${OBJS} ${LIBS}
+	@echo "  LINK $@ [ ${OBJS} ]"
+	${Q} ${CC} -o $@ ${OBJS} ${LIBS}
 
 ${OBJS}: %.o: %.c .%.c.dep
-	${CC} ${CCFLAGS} ${CFLAGS} -c -o $@ $<
+	@echo "  CC $@"
+	${Q} ${CC} ${CCFLAGS} ${CFLAGS} -c -o $@ $<
 
 ${DEPS}: .%.c.dep: %.c
-	${CC} ${CCFLAGS} ${CFLAGS} -MM $< > $@
+	@echo "  DEP $<"
+	${Q} ${CC} ${CCFLAGS} ${CFLAGS} -MM $< > $@
 
 .PHONY: clean
 clean:
